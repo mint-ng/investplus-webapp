@@ -16,6 +16,7 @@ const buttonStyles = cva(
 		"py-[12px]",
 		"px-3",
 		"rounded-[30px]",
+		"cursor-pointer"
 	],
 	{
 		variants: {

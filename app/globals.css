@@ -28,3 +28,42 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 } */
+ 
+/* React Modal */
+.ReactModal__Overlay.modal-overlay {
+  background: rgba(0, 0, 0, 0.7);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  z-index: 350;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.15s linear;
+}
+
+.ReactModal__Overlay .modal-dialog {
+  opacity: 0;
+  transition: opacity 0.15s linear, transform 0.15s linear;
+  transform: translateY(-30px);
+}
+
+.ReactModal__Overlay--after-open.modal-overlay {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--after-open .modal-dialog {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ReactModal__Overlay--before-close.modal-overlay {
+  opacity: 0;
+}
+
+.ReactModal__Overlay--before-close .modal-dialog {
+  opacity: 0;
+  transform: translateY(-30px);
+}
