@@ -3,11 +3,11 @@ import * as yup from "yup"
 import { Formik } from "formik";
 import CustomInput from "@/components/CustomInput/CustomInput";
 import Button from "@/components/Button/Button";
-import { useState } from "react";
 import { EMAIL_REGEX } from "@/constants";
 import Sms from "@/public/sms.png";
 import Image from "next/image";
 import Header from "@/components/Header/Header";
+import { ForgotPassword} from "../apis/mutations/use-forgot-password";
 
 const formValidationSchema = yup.object().shape({
     email: yup
@@ -19,17 +19,18 @@ const formValidationSchema = yup.object().shape({
 });
 
 export default function Page() {
-  const [showBvnModal, setShowBvnModal] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const Forgot = ForgotPassword();
+
     const initialFormValues = {
 		email: ""
   };
   
-  if (success) return (
+  if (Forgot.isSuccess) return (
     <div className="w-full h-screen flex justify-center items-center flex-col">
       <Image src={Sms} alt="sms logo" width={56} height={56} />
       <h2 className="text-[#111827] font-semibold text-[24px]">Check your mail</h2>
-      <p className="mt-3 text-center">We have sent a verification link to femikehinde@gmail.com to activate your account</p>
+      <p className="mt-3 text-center">{Forgot.data?.message ??
+          "We have sent a verification link to your email to activate your account"}</p>
     </div>
   )
     return (
@@ -38,7 +39,9 @@ export default function Page() {
           <Formik
               initialValues={initialFormValues}
               validationSchema={formValidationSchema}
-              onSubmit={(values)=>console.log(values)}
+          onSubmit={(values) => Forgot.mutate({
+                email:values.email
+              })}
           >
               {({ values, errors, touched, handleSubmit, handleChange }) => ( 
                   <form
@@ -64,9 +67,8 @@ export default function Page() {
                        />
   
                       <Button
-                        // type="submit"
-                            className="my-9 w-full"
-                            onClick={()=>setSuccess(true)}
+                        type="submit"
+                        className="my-9 w-full"
                     >
                         Send Reset Link
                     </Button>

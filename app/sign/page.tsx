@@ -46,7 +46,7 @@ export default function Page() {
         );
 
       case 2:
-        return <MoreSteps />;
+        return <MoreSteps sessionId={sessionId}/>;
 
       default:
         return null;

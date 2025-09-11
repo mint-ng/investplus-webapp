@@ -8,6 +8,11 @@ import BvnModal from "./BvnModal";
 import { EMAIL_REGEX } from "@/constants";
 import Sms from "@/public/sms.png";
 import Image from "next/image";
+import { UpdateAccount } from "../apis/mutations/use-validate-otp";
+
+type MoreStepsProps = {
+  sessionId: string;
+};
 
 const formValidationSchema = yup.object().shape({
     email: yup
@@ -26,20 +31,21 @@ const formValidationSchema = yup.object().shape({
       .required("Last name is required"),
 });
 
-export default function MoreSteps() {
+export default function MoreSteps({ sessionId }: MoreStepsProps) {
   const [showBvnModal, setShowBvnModal] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const AccountUpdate = UpdateAccount()
     const initialFormValues = {
 		firstName: "",
 		lastName: "",
 		email: "",
   };
   
-  if (success) return (
+  if (AccountUpdate.isSuccess) return (
     <div className="w-full h-screen flex justify-center items-center flex-col">
       <Image src={Sms} alt="sms logo" width={56} height={56} />
       <h2 className="text-[#111827] font-semibold text-[24px]">Check your mail</h2>
-      <p className="mt-3 text-center">We have sent a verification link to femikehinde@gmail.com to activate your account</p>
+      <p className="mt-3 text-center">{AccountUpdate.data?.message ??
+          "We have sent a verification link to your email to activate your account"}</p>
     </div>
   )
     return (
@@ -47,7 +53,14 @@ export default function MoreSteps() {
           <Formik
               initialValues={initialFormValues}
               validationSchema={formValidationSchema}
-              onSubmit={(values)=>console.log(values)}
+          onSubmit={(values) =>
+  AccountUpdate.mutate({
+    sessionId: sessionId,
+    firstName: values.firstName,
+    lastName: values.lastName,
+    email: values.email,
+  })
+}
           >
               {({ values, errors, touched, handleSubmit, handleChange }) => ( 
                   <form
@@ -91,9 +104,9 @@ export default function MoreSteps() {
                        />
   
                       <Button
-                        // type="submit"
-                            className="my-9 w-full"
-                            onClick={()=>setSuccess(true)}
+                        type="submit"
+                        className="my-9 w-full"
+                        loading={AccountUpdate.isPending}
                     >
                         Verify my email
                     </Button>

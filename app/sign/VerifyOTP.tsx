@@ -3,7 +3,7 @@ import Button from "@/components/Button/Button";
 import { useState } from "react";
 import OtpInput from "react-otp-input";
 import SuccessModal from "@/components/Modal/SuccessModal/SuccessModal";
-import ValidateOtp from "../apis/mutations/use-validate-otp";
+import ValidateOtp, { ResendOtp } from "../apis/mutations/use-validate-otp";
 
 type Props = {
   onSuccess: () => void;
@@ -20,7 +20,9 @@ export default function VerifyOTP({onSuccess, sessionId}:Props) {
       setShowSuccess(true); 
       setSuccessMessage(data?.message ?? "Your OTP has been successfully verified.");
     },
-  });
+   });
+  
+  const Resend = ResendOtp()
 
   return (
     <div className="max-w-[497px] mx-auto mt-[94px] text-center">
@@ -68,7 +70,11 @@ export default function VerifyOTP({onSuccess, sessionId}:Props) {
       </Button>
       <div className="flex items-center justify-center gap-1 mt-6">
         <span>Didn't get an OTP?</span>
-        <Button href="sign" intent="link">
+        <Button href=""
+          intent="link"
+          onClick={() => Resend.mutate(sessionId)}
+          loading={Resend.isPending}
+        >
           Resend
         </Button>
       </div>

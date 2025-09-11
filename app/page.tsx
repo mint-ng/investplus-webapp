@@ -24,9 +24,14 @@ export default function Home() {
                 Sign Up
               </Button>
             </div>
-            <Button href="support" intent="link">
-              Contact Support
-            </Button>
+           <a
+  href="https://mintyn.com/contact-us/"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="text-[#7E5730] underline"
+>
+  Contact Support
+</a>
           </div>
         </div>
       </div>

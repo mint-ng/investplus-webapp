@@ -32,3 +32,9 @@ export interface ValidateOtpPayload {
   sessionId: string;
   otp: string;
 }
+export interface StepsPayload {
+  sessionId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
