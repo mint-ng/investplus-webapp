@@ -6,13 +6,16 @@ import Modal from '@/components/Modal/Modal'
 import Button from '@/components/Button/Button'
 import CustomInput from '@/components/CustomInput/CustomInput'
 import { BVN_REGEX } from '@/constants'
+import GetOtp from "../apis/mutations/use-otp";
 
 type BvnProp = {
-    show: boolean;
-    onClose: ()=>void
+	show: boolean;
+	phoneNumber?: string;
+	onClose: () => void
+	onSuccess?: (sessionId: string) => void;
     
 }
-export default function BvnModal({show, onClose}:BvnProp) {
+export default function BvnModal({ show, phoneNumber, onClose, onSuccess }: BvnProp) {
   return (
     <Modal
 			show={show}
@@ -20,7 +23,7 @@ export default function BvnModal({show, onClose}:BvnProp) {
 			size="sm"
 			heading="BVN"
 			footerElement={
-				<BvnForm />
+				<BvnForm phoneNumber={phoneNumber} onSuccess={onSuccess} />
 			}
 		>
 			<div className="w-full">
@@ -32,7 +35,7 @@ export default function BvnModal({show, onClose}:BvnProp) {
   )
 }
 
-function BvnForm() {
+function BvnForm({phoneNumber, onSuccess}:{phoneNumber?:string, onSuccess?: (sessionId: string) => void;}) {
 	const formValidationSchema = yup.object().shape({
 		bvn: yup
 			.string()
@@ -42,13 +45,18 @@ function BvnForm() {
 	});
 
 	const initialFormValues = {
-		bvn: ""
+		bvn: "",
 	};
+	const OtpMutation = GetOtp({ onSuccess })
+
 	return (
 			<Formik
 				initialValues={initialFormValues}
 				validationSchema={formValidationSchema}
-				onSubmit={(values)=>console.log(values)}
+			onSubmit={(values) => OtpMutation.mutate({
+				bvn: values.bvn,
+				phoneNumber: phoneNumber ?? "",
+				})}
 			>
 				{({ values, errors, touched, handleSubmit, handleChange }) => ( 
 					<form
@@ -77,7 +85,8 @@ function BvnForm() {
 	
 						<Button
 							type="submit"
-							className="mt-4 w-full"
+						className="mt-4 w-full"
+						loading={OtpMutation.isPending || OtpMutation.isSuccess}
 						>
 							Send OTP
 						</Button>

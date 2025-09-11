@@ -6,12 +6,13 @@ import Check from "@/public/tick-circle.png"
 
 type SuccessProp = {
     show: boolean;
-    onClose: ()=>void
-    onSuccess: ()=>void
+  onClose: () => void;
+  onSuccess: () => void;
+  message?: string;
     
 }
 
-export default function SuccessModal({show, onClose, onSuccess}:SuccessProp) {
+export default function SuccessModal({show, onClose, onSuccess, message}:SuccessProp) {
   return (
     <Modal
             show={show}
@@ -32,7 +33,7 @@ export default function SuccessModal({show, onClose, onSuccess}:SuccessProp) {
                     Successful
                 </p>
                 <p className="max-w-[385px] mx-auto text-[#111827] text-base font-medium">
-                     Your OTP has been successfully verified. Click Next to proceed.
+                  {message ?? "Your OTP has been successfully verified. Click Next to proceed."}
                 </p>
             </div>
         </Modal>

@@ -2,6 +2,8 @@ import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { ReactNode, ButtonHTMLAttributes, AnchorHTMLAttributes } from "react";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+
 const buttonStyles = cva(
 	[
 		"font-semibold",
@@ -95,7 +97,7 @@ export default function Button({
 			disabled={disabled || loading}
 			{...props}
 		>
-			{children}
+			{loading ? <LoadingSpinner /> : children}
 		</ButtonOrLink>
 	);
 

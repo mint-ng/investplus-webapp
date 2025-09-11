@@ -6,11 +6,15 @@ import Button from "@/components/Button/Button";
 import { useState } from "react";
 import BvnModal from "./BvnModal";
 
+type Props = {
+    onSuccess: (sessionId: string) => void;
+};
+
 const formValidationSchema = yup.object().shape({
   phoneNumber: yup.string().required('Phone number is required'),
 });
 
-export default function SignUp() {
+export default function SignUp({onSuccess}:Props) {
     const[showBvnModal, setShowBvnModal] = useState(false)
     const initialFormValues = {
 		phoneNumber: "",
@@ -20,7 +24,9 @@ export default function SignUp() {
           <Formik
               initialValues={initialFormValues}
               validationSchema={formValidationSchema}
-              onSubmit={(values)=>console.log(values)}
+              onSubmit={() => {
+          setShowBvnModal(true);
+        }}
           >
               {({ values, errors, touched, handleSubmit, handleChange }) => ( 
                   <form
@@ -46,18 +52,25 @@ export default function SignUp() {
                       <Button
                         // type="submit"
                             className="mt-4 w-full"
-                            onClick={()=>setShowBvnModal(true)}
                     >
                         Proceed
-                    </Button>
+                        </Button>
+                         <div className="flex items-center justify-center gap-1 mt-3">
+                        <span>Already have an account?</span>
+                        <Button href="/" intent="link">
+                        Sign in
+                        </Button>
+                    </div>
+                <BvnModal
+                show={showBvnModal}
+                onClose={() => setShowBvnModal(false)}
+                phoneNumber={values.phoneNumber ? `234${values.phoneNumber}` : ""}
+                onSuccess={onSuccess}
+            />
                   </form>
                   
               )}
            </Formik>
-            <BvnModal
-                show={showBvnModal}
-                onClose={()=>setShowBvnModal(false)}
-            />
           </>
     )
 }

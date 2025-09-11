@@ -3,15 +3,25 @@ import Button from "@/components/Button/Button";
 import { useState } from "react";
 import OtpInput from "react-otp-input";
 import SuccessModal from "@/components/Modal/SuccessModal/SuccessModal";
+import ValidateOtp from "../apis/mutations/use-validate-otp";
 
 type Props = {
   onSuccess: () => void;
+  sessionId: string
 };
 
-export default function VerifyOTP({onSuccess}:Props) {
+export default function VerifyOTP({onSuccess, sessionId}:Props) {
   const [otp, setOtp] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
-  console.log(otp)
+  const [successMessage, setSuccessMessage] = useState("");
+
+   const OtpMutation = ValidateOtp({
+    onSuccess: (data) => {
+      setShowSuccess(true); 
+      setSuccessMessage(data?.message ?? "Your OTP has been successfully verified.");
+    },
+  });
+
   return (
     <div className="max-w-[497px] mx-auto mt-[94px] text-center">
       <h2 className="text-[30px] font-semibold text-[#1E1E1E] mb-2">Kindly enter OTP</h2>
@@ -27,7 +37,7 @@ export default function VerifyOTP({onSuccess}:Props) {
         numInputs={6}
         inputType="password"
         shouldAutoFocus
-        containerStyle="flex justify-center gap-2" // flex container
+        containerStyle="flex justify-center gap-2"
         renderInput={(props) => (
           <input
             {...props}
@@ -46,14 +56,27 @@ export default function VerifyOTP({onSuccess}:Props) {
           backgroundColor: "#EBECEF"
         }}
       />
-      <Button className="mt-4 w-full" onClick={() => setShowSuccess(true)} disabled={otp.length !==6}> Verify</Button>
+      <Button
+        className="mt-4 w-full"
+        onClick={() =>
+        OtpMutation.mutate({ sessionId, otp }) 
+        }
+        disabled={otp.length !== 6 || OtpMutation.isPending}
+        loading={OtpMutation.isPending}
+      >
+        Verify
+      </Button>
       <div className="flex items-center justify-center gap-1 mt-6">
         <span>Didn't get an OTP?</span>
         <Button href="sign" intent="link">
           Resend
         </Button>
       </div>
-      <SuccessModal show={showSuccess} onClose={() => setShowSuccess(false)} onSuccess={onSuccess} />
+      <SuccessModal show={showSuccess}
+        onClose={() => setShowSuccess(false)}
+        onSuccess={onSuccess}
+        message={successMessage}
+      />
     </div>
   )
 }

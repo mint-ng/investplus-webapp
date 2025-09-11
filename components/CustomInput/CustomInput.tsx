@@ -48,6 +48,7 @@ export default function CustomInput({
     <input
       type="tel"
       name={name}
+      maxLength={10}
       id={props.id ? props.id : name}
       placeholder={placeholder}
       onChange={onChange}

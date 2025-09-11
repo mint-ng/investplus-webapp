@@ -10,6 +10,7 @@ const MAX_STEP: number = 2;
 
 export default function Page() {
   const [currentStep, setCurrentStep] = useState<number>(Number(MIN_STEP));
+  const [sessionId, setSessionId] = useState('');
 
   const goToNextStep = () => {
     setCurrentStep((prev) => Math.min(prev + 1, MAX_STEP));
@@ -24,7 +25,11 @@ export default function Page() {
       case 0:
         return (
           <>
-            <SignUp
+            <SignUp 
+               onSuccess={(sessionId: string) => {
+              setSessionId(sessionId);
+              goToNextStep();
+            }}
         
             />
           </>
@@ -35,6 +40,7 @@ export default function Page() {
           <>
             <VerifyOTP
               onSuccess={goToNextStep}
+              sessionId={sessionId}
             />
           </>
         );

@@ -5,6 +5,10 @@ import { EMAIL_REGEX, PASSWORD_REGEX } from "@/constants";
 import CustomPasswordInput from "../CustomPasswordInput/CustomPasswordInput";
 import CustomInput from "../CustomInput/CustomInput";
 import Button from "../Button/Button";
+import Login from "@/app/apis/mutations/use-login";
+import { LoginPayload } from "@/constants";
+import { useState } from "react";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const formValidationSchema = yup.object().shape({
 	email: yup
@@ -17,15 +21,17 @@ const formValidationSchema = yup.object().shape({
 		.string()
 		.trim()
 		.required("Password is required")
-		.matches(
-			PASSWORD_REGEX,
-			"Password must contain at least 8 characters, an uppercase, a lowercase, a special character, and a number"
-		),
+		// .matches(
+		// 	PASSWORD_REGEX,
+		// 	"Password must contain at least 8 characters, an uppercase, a lowercase, a special character, and a number"
+		// ),
 });
 
 
 function LoginForm() {
-    const initialFormValues = {
+    const loginMutation = Login();
+
+    const initialFormValues: LoginPayload = {
 		email: "",
 		password: "",
     };
@@ -33,7 +39,7 @@ function LoginForm() {
         <Formik
             initialValues={initialFormValues}
             validationSchema={formValidationSchema}
-            onSubmit={(values)=>console.log(values)}
+            onSubmit={(values) => loginMutation.mutate(values)}
         >
             {({ values, errors, touched, handleSubmit, handleChange }) => ( 
                 <form
@@ -59,16 +65,17 @@ function LoginForm() {
                         placeholder="Enter your password"
                         onChange={handleChange}
                         name="password"
-                        error={(touched.email && errors.password) || undefined}
+                        error={(touched.password && errors.password) || undefined}
                     />
                     <div className="flex justify-between items-center my-5">
                         <p>Remember Me</p>
-                        <Button href="sign" intent="link">Forgot Password</Button>
+                        <Button href="forgot-password" intent="link">Forgot Password</Button>
                     </div>
 
                     <Button
 						type="submit"
-						className="mt-4 w-full"
+                        className="mt-4 w-full"
+                        loading={loginMutation.isPending || loginMutation.isSuccess}
 					>
 						Login
 					</Button>
