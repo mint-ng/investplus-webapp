@@ -26,14 +26,17 @@ const formValidationSchema = yup.object().shape({
     .string()
     .trim()
     .required("Please confirm your password")
-    .oneOf([yup.ref("password")], "Passwords must match"),
+        .oneOf([yup.ref("password")], "Passwords must match"),
+  terms: yup
+    .boolean()
+    .oneOf([true], "You must accept the terms and conditions"),
 });
 export default function Page() {
      const initialFormValues = {
 		email: "",
         password: "",
         confirmPassword: "",
-        
+        terms: false,
     };
   return (
       <div className='min-h-screen bg-main'>
@@ -81,13 +84,48 @@ export default function Page() {
                             error={(touched.confirmPassword && errors.confirmPassword) || undefined}
                             className="my-6"
                       />
-                      <div className="flex justify-center items-center gap-2" >
-                      <p className="text-center my-5 text-sm">By creating an account, you agree to </p>
-                          <Button href="" intent="link">Mintyn's Terms & Conditions.</Button>
-                        </div>
+                      <div className="flex items-center gap-2 my-5">
+              <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                checked={values.terms}
+                onChange={handleChange}
+               className="
+      w-5 h-5 
+      appearance-none 
+      border border-gray-400 
+      rounded 
+      bg-white 
+      cursor-pointer 
+      checked:bg-[#FFFFFF]   /* gold background when checked */
+      checked:border-[#77502F] 
+      checked:after:content-['✔'] 
+      checked:after:text-[#C58940] 
+      checked:after:block 
+      checked:after:text-center 
+      checked:after:leading-5
+    "
+              />
+              <label htmlFor="terms" className="text-sm">
+                By creating an account, you agree to{" "}
+                <a
+                  href="/terms.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#C58940] underline"
+                >
+                  Mintyn's Terms & Conditions
+                </a>
+              </label>
+            </div>
+            {touched.terms && errors.terms && (
+              <p className="text-red-500 text-xs">{errors.terms}</p>
+            )}
                         <Button
                           type="submit"
-                              className="my-9 w-full"
+                          className="my-9 w-full"
+                          disabled={!values.terms} 
                       >
                           Create Account
                       </Button>
@@ -98,3 +136,18 @@ export default function Page() {
             </div>
       )
 }
+
+
+
+ <div className="flex justify-center items-center gap-2" >
+                      <p className="text-center my-5 text-sm">By creating an account, you agree to </p>
+                          <a
+                            href="/terms.pdf"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[#C58940] underline"
+                            >
+                            Mintyn's Terms & Conditions
+                            </a>
+
+                        </div>
