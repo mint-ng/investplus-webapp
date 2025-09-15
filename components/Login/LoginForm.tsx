@@ -7,8 +7,7 @@ import CustomInput from "../CustomInput/CustomInput";
 import Button from "../Button/Button";
 import Login from "@/app/apis/mutations/use-login";
 import { LoginPayload } from "@/constants";
-import { useState, useEffect } from "react";
-
+import { usePrefillCredentials } from "./usePrefillCredentials";
 const formValidationSchema = yup.object().shape({
 	email: yup
 		.string()
@@ -62,20 +61,7 @@ function LoginForm() {
     >
       {({ values, errors, touched, handleSubmit, handleChange, setFieldValue }) => {
         // Prefill saved credentials on mount
-        useEffect(() => {
-          const saved =
-            localStorage.getItem("savedCredentials") ||
-            sessionStorage.getItem("savedCredentials");
-
-          if (saved) {
-            const { email, password } = JSON.parse(saved);
-            setFieldValue("email", email);
-            setFieldValue("password", password);
-            if (localStorage.getItem("savedCredentials")) {
-              setFieldValue("rememberMe", true);
-            }
-          }
-        }, [setFieldValue]);
+        // usePrefillCredentials();
 
         return (
           <form

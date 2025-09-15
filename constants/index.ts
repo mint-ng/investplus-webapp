@@ -38,3 +38,17 @@ export interface StepsPayload {
   lastName: string;
   email: string;
 }
+
+export type ChildRouteObject = {
+  isHidden?: boolean;
+  title: string;
+  path: string;
+};
+
+export type ParentRouteObject = {
+  icon: React.ElementType;
+  title: string;
+  path: string;
+  isHidden?: boolean;
+  children?: ChildRouteObject[];
+};

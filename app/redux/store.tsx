@@ -3,18 +3,18 @@ import { persistReducer, persistStore } from "redux-persist";
 import userSlice from "./features/user-slice";
 import sessionStorage from "redux-persist/lib/storage/session";
 
-// const rootReducer = combineSlices(userSlice);
 
 const persistConfig = {
-	key: "root",
+	key: "user",
 	storage: sessionStorage,
-	blacklist: ["user"],
 };
 
-const persistedReducer = persistReducer(persistConfig, userSlice);
+const persistedUserReducer = persistReducer(persistConfig, userSlice);
 
 export const store = configureStore({
-	reducer: persistedReducer,
+	 reducer: {
+    user: persistedUserReducer,
+  },
 	devTools: process.env.NODE_ENV !== "production",
 	middleware: (getDefaultMiddleware) => {
 		return getDefaultMiddleware({
@@ -24,3 +24,5 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

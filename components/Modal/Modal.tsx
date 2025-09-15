@@ -54,7 +54,7 @@ export default function Modal({
 	return (
 		<ReactModal
 			isOpen={show}
-			// @ts-ignore
+			// @ts-expect-error
 			appElement={typeof window !== "undefined" && document.body}
 			onRequestClose={onClose}
 			shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
