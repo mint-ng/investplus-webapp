@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Fintech from "../public/InvestPulse.png";
+// import Fintech from "../public/InvestPulse.png";
 import LoginForm from "@/components/Login/LoginForm";
 import Button from "@/components/Button/Button";
 import Header from "@/components/Header/Header"
@@ -12,7 +12,13 @@ export default function Home() {
           <p className="sm:text-3xl text-lg font-semibold mb-[44px] text-center">
             Welcome to Mintyn InvestPulse
           </p>
-          <Image src={Fintech} alt="Investment picture" />
+          <Image
+          src="/InvestPulse.png"
+          alt="Investment picture"
+          width={497} 
+          height={250} 
+          className="object-contain"
+/>
           <p className="text-center font-normal text-base my-[40px]">
             Please enter your details to sign in
           </p>
