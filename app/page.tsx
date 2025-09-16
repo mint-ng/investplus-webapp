@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Fintech from "@/public/InvestPulse.png";
+import Fintech from "../public/InvestPulse.png";
 import LoginForm from "@/components/Login/LoginForm";
 import Button from "@/components/Button/Button";
 import Header from "@/components/Header/Header"
