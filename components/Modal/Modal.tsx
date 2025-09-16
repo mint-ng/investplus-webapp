@@ -89,7 +89,7 @@ export default function Modal({
 					<div className={cn(styles["modal-header"], modalHeaderClass)}>
 						{heading && <h2 className="text-lg font-medium">{heading}</h2>}
 					{closeIcon && <button onClick={onClose} className="cursor-pointer">
-                         <Image src={DismissIcon} alt="cancel button" />
+                         <DismissIcon />
 						</button>}	
 					</div>
 					<div className={cn(styles["modal-body"], modalBodyClass)}>

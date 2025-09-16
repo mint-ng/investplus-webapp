@@ -3,6 +3,7 @@ export default {
     getOtp: "/api/v1/extranet/invest-pulse",
     validateOtp: (sessionId: string) => `/api/v1/extranet/invest-pulse/validateOtp/${sessionId}`,
     resendOtp: (sessionId: string) => `/api/v1/extranet/invest-pulse/resendOtp/${sessionId}`,
+    completeRegistration: (sessionId: string) => `/api/v1/extranet/invest-pulse/update-password/${sessionId}`,
     updateAccount: (sessionId: string) => `/api/v1/extranet/invest-pulse/update-account/${sessionId}`,
     forgotPassword: "/api/v1/extranet/invest-pulse/send-reset-password-link"
 }

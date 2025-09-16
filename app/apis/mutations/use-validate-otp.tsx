@@ -4,6 +4,7 @@ import InvestmentPulse from "@/app/axios/services/InvestmentPulse";
 import { toast } from "react-toastify";
 import { ValidateOtpPayload, StepsPayload } from "@/constants";
 import { getErrorMessage } from "@/app/utils/helpers";
+import Cookies from "js-cookie";
 
 export default function ValidateOtp(options?: { onSuccess?: (data: any) => void }){
     return useMutation({
@@ -58,7 +59,8 @@ export function UpdateAccount() {
       return response.data;
     },
     mutationKey: ["update-account"],
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
+      Cookies.set("sessionId", variables.sessionId, { expires: 1, path: "/" });
       toast.success(data?.message ?? "Account updated successfully!");
     },
     onError: (error) => {

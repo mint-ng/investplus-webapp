@@ -6,6 +6,10 @@ import Button from "@/components/Button/Button";
 import CustomPasswordInput from "@/components/CustomPasswordInput/CustomPasswordInput";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "@/constants";
 import Header from "@/components/Header/Header";
+import { useSearchParams } from "next/navigation";
+import { useCompleteRegistration } from "../apis/mutations/use-complete-registration";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 const formValidationSchema = yup.object().shape({
     email: yup
@@ -17,11 +21,11 @@ const formValidationSchema = yup.object().shape({
     password: yup
     .string()
     .trim()
-    .required("Password is required")
-    .matches(
-      PASSWORD_REGEX,
-      "Password must contain at least 8 characters, an uppercase, a lowercase, a special character, and a number"
-    ),
+    .required("Password is required"),
+    // .matches(
+    //   PASSWORD_REGEX,
+    //   "Password must contain at least 8 characters, an uppercase, a lowercase, a special character, and a number"
+    // ),
   confirmPassword: yup
     .string()
     .trim()
@@ -31,7 +35,15 @@ const formValidationSchema = yup.object().shape({
     .boolean()
     .oneOf([true], "You must accept the terms and conditions"),
 });
-export default function Page() {
+export default function CompleteRegistration() {
+  const searchParams = useSearchParams();
+  const code = searchParams.get("code");
+  const sessionId = Cookies.get("sessionId");
+  if (!sessionId) {
+  toast.error("Session expired. Please restart registration.");
+  return;
+}
+    const { mutate: completeRegistration, isPending } = useCompleteRegistration();
      const initialFormValues = {
 		email: "",
         password: "",
@@ -44,7 +56,13 @@ export default function Page() {
             <Formik
                 initialValues={initialFormValues}
                 validationSchema={formValidationSchema}
-                onSubmit={(values)=>console.log(values)}
+                 onSubmit={(values) => {
+          completeRegistration({
+            sessionId,
+            password: values.confirmPassword,
+            code,
+          });
+        }}
             >
                 {({ values, errors, touched, handleSubmit, handleChange }) => ( 
                     <form
@@ -125,7 +143,8 @@ export default function Page() {
                         <Button
                           type="submit"
                           className="my-9 w-full"
-                          disabled={!values.terms} 
+                          disabled={!values.terms || isPending}
+                          loading={isPending}
                       >
                           Create Account
                       </Button>
