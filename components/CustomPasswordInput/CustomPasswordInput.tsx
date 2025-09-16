@@ -2,6 +2,8 @@
 import { cn } from "@/lib/utils";
 import { InputHTMLAttributes } from "react";
 import { useState } from "react";
+import EyeIcon from "@/public/eye.svg"
+import EyeSlashIcon from "@/public/eye-slash.svg"
 
 type CustomPasswordProps = InputHTMLAttributes<HTMLInputElement> & {
   className?: string;
@@ -22,7 +24,8 @@ export default function CustomPasswordInput({
 	onBlur,
 	...props
 }: CustomPasswordProps) {
-  const [_, setIsFocused] = useState(false);
+	const [_, setIsFocused] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
   return (
       <div className={cn("w-full", className)}>
       	{label && (
@@ -34,25 +37,38 @@ export default function CustomPasswordInput({
 				</label>
       )}
       
-      <input
-					name={name}
-					type="password"
-					placeholder={placeholder}
-					id={props.id ? props.id : name}
-					onChange={onChange}
-					value={value}
-					onFocus={() => setIsFocused(true)}
-					onBlur={(e) => {
-						setIsFocused(false);
-						onBlur?.(e);
-					}}
-					className={cn(
-            `block h-[52px] py-[12px] text-sm w-full rounded-[15px] bg-[#EBECEF] border  px-4 focus:outline-none focus:ring-0 focus:border-[#7E5730] 
+       <div className="relative w-full">
+        <input
+          name={name}
+          type={showPassword ? "text" : "password"}
+          placeholder={placeholder}
+          id={props.id ? props.id : name}
+          onChange={onChange}
+          value={value}
+          onFocus={() => setIsFocused(true)}
+          onBlur={(e) => {
+            setIsFocused(false);
+            onBlur?.(e);
+          }}
+          className={cn(
+            `block h-[52px] py-[12px] text-sm w-full rounded-[15px] bg-[#EBECEF] border px-4 pr-10 
+             focus:outline-none focus:ring-0 focus:border-[#7E5730] 
              ${error ? "border-red" : "border-[#E4E5E73D]"}`,
-						inputClass
-					)}
-					{...props}
-      />
+            inputClass
+          )}
+          {...props}
+        />
+
+        {/* Toggle Button */}
+        <button
+          type="button"
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+			  >
+				  {showPassword ? <EyeSlashIcon /> : <EyeIcon/>}
+        </button>
+      </div>
+
       {error && <span className="text-red text-sm mt-1 block w-fit">{error}</span>}
       </div>
   )

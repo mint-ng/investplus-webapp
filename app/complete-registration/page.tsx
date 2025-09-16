@@ -36,6 +36,7 @@ const formValidationSchema = yup.object().shape({
     .oneOf([true], "You must accept the terms and conditions"),
 });
 export default function CompleteRegistration() {
+  const Complete = useCompleteRegistration();
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
   const sessionId = Cookies.get("sessionId");
@@ -43,7 +44,6 @@ export default function CompleteRegistration() {
   toast.error("Session expired. Please restart registration.");
   return;
 }
-    const { mutate: completeRegistration, isPending } = useCompleteRegistration();
      const initialFormValues = {
 		email: "",
         password: "",
@@ -56,13 +56,13 @@ export default function CompleteRegistration() {
             <Formik
                 initialValues={initialFormValues}
                 validationSchema={formValidationSchema}
-                 onSubmit={(values) => {
-          completeRegistration({
+                onSubmit={(values) =>
+          Complete.mutate({
             sessionId,
             password: values.confirmPassword,
             code,
-          });
-        }}
+          })
+        }
             >
                 {({ values, errors, touched, handleSubmit, handleChange }) => ( 
                     <form
@@ -143,8 +143,8 @@ export default function CompleteRegistration() {
                         <Button
                           type="submit"
                           className="my-9 w-full"
-                          disabled={!values.terms || isPending}
-                          loading={isPending}
+                          disabled={!values.terms || Complete.isPending}
+                          loading={Complete.isPending}
                       >
                           Create Account
                       </Button>
