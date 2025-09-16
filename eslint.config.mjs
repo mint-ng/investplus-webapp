@@ -18,6 +18,8 @@ const eslintConfig = [
       "@typescript-eslint/ban-ts-comment": "off",
       "prefer-const": "off",
       "@typescript-eslint/no-unused-expressions": "off",
+      'react/no-unescaped-entities': 'off',
+      '@next/next/no-page-custom-font': 'off',
     },
   },
 ];
