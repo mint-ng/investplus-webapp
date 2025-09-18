@@ -52,3 +52,47 @@ export type ParentRouteObject = {
   isHidden?: boolean;
   children?: ChildRouteObject[];
 };
+
+// types/investment.ts
+export interface InvestmentRecord {
+  id: number;
+  investorName: string;
+  phoneNumber: string;
+  email: string;
+  durationCategory: string;
+  referralCode: string;
+  bvn: string;
+  amountInvested: number;
+  durationInMonths: number;
+  interestRate: number;
+  maturityDate: string;
+  investmentStatus: string;
+  dateCreated: string;
+  expectedReturn: number;
+  expectedProfit: number;
+  daysLeftToMaturity: number;
+}
+
+export interface InvestmentResponse {
+  data: {
+    totalRecords: number;
+    totalPages: number;
+    totalAmount: number;
+    totalReturns: number;
+    records: InvestmentRecord[];
+  };
+}
+
+
+
+
+export const profileDropdownLinks: { title: string; path: string }[] = [
+  {
+    title: "Logout",
+    path: "",
+  },
+   {
+    title: "Change Password",
+    path: "/forgot-password",
+  },
+];

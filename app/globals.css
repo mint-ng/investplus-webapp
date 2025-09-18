@@ -73,3 +73,11 @@ body {
   padding-left: 30px;
   padding-right: 30px;
 }
+
+.show-dashboard-profile-dropdown-menu {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: all !important;
+  /* top: 45px !important; */
+  padding-top: 15px !important;
+}
