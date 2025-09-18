@@ -1,11 +1,21 @@
 import React from "react";
 import { InvestmentRecord } from "@/constants"; // ✅ already defined in your project
 import Small from "@/public/small.svg"
+import Button from "../Button/Button";
+import { useRouter } from "next/navigation";
 type BannerProps = {
   data?: InvestmentRecord[]; // ✅ accepts the array of records
 };
 
 const Banner: React.FC<BannerProps> = ({ data }) => {
+  const router = useRouter();
+
+  const handleFundInvestment = (record: InvestmentRecord) => {
+  // serialize record into query string
+  const encoded = encodeURIComponent(JSON.stringify({ data: record }));
+  router.push(`/Dashboard/Preview?data=${encoded}&fromDashboard=true`);
+};
+
   if (!data || data.length === 0) {
     return <p className="text-gray-500">No investment records available</p>;
   }
@@ -20,18 +30,6 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
         return "bg-gray-100 text-gray-700";
     }
     };
-    // {
-    //             "id": 0,
-    //             "amountInvested": 5000.00,
-    //             "durationInMonths": 3,
-    //             "interestRate": 9.0,
-    //             "maturityDate": "2025-12-09",
-    //             "investmentStatus": "INACTIVE",
-    //             "dateCreated": "2025-09-09",
-    //             "expectedReturn": 5102.33,
-    //             "expectedProfit": 102.33,
-    //             "daysLeftToMaturity": 82
-    //         }
 
   return (
     <>
@@ -44,13 +42,25 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
             <h2 className="text-[18px] font-medium">
                Investment Details
             </h2>
-            <span
-              className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
-                record.investmentStatus
-              )}`}
-            >
-              {record.investmentStatus.toLowerCase()}
-            </span>
+           <div className="flex items-center gap-3">
+  <span
+    className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
+      record.investmentStatus
+    )}`}
+  >
+    {record.investmentStatus.toLowerCase()}
+  </span>
+
+  {record.investmentStatus === "INACTIVE" && (
+    <Button
+    className='w-[180px] h-[40px] text-sm font-medium'
+     onClick={() => handleFundInvestment(record)}
+    >
+      + Fund Investment
+    </Button>
+  )}
+</div>
+
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">

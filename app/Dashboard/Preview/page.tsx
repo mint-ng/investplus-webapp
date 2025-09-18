@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Arrow from "@/public/left.svg"
 import { useRouter } from 'next/navigation'
 import { useSearchParams } from "next/navigation";
@@ -15,22 +15,26 @@ export default function Preview() {
   const searchParams = useSearchParams();
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [paymentData, setPaymentData] = useState(null);
+  const investmentId = searchParams.get("id");
+  const fromDashboard = searchParams.get("fromDashboard") === "true";
+  const [investmentData, setInvestmentData] = useState<any>(null);
 
-  const dataParam = searchParams.get("data"); // the serialized string
-let investmentData: any = null;
 
-if (dataParam) {
-  try {
-    const parsed = JSON.parse(decodeURIComponent(dataParam));
-    investmentData = parsed.data; // now this is your actual data object
-  } catch (err) {
-    console.error("Failed to parse investment data", err);
-  }
-  }
+useEffect(() => {
+    const dataParam = searchParams.get("data");
+    if (dataParam) {
+      try {
+        const parsed = JSON.parse(decodeURIComponent(dataParam));
+        setInvestmentData(parsed.data);
+      } catch (err) {
+        console.error("Failed to parse investment data", err);
+      }
+    }
+  }, [searchParams]);
   
   const mutation = useMutation({
-  mutationFn: () =>
-    fundInvestment({ investmentCode: investmentData.id }),
+  mutationFn: (id: number) => fundInvestment({ investmentCode: id }),
   onMutate: () => {
     setLoading(true);
   },
@@ -38,13 +42,20 @@ if (dataParam) {
     setLoading(false);
     toast.success("Investment funded successfully!");
     setShowModal(true);
-    // router.push("/Dashboard");
+    setPaymentData(res.data);
   },
   onError: (err: any) => {
     setLoading(false);
     toast.error(err?.response?.data?.message || "Funding failed");
   },
 });
+
+  
+  useEffect(() => {
+    if (fromDashboard && investmentData?.id) {
+      mutation.mutate(Number(investmentData.id));
+    }
+  }, [fromDashboard, investmentData]);
 
 
   return (
@@ -96,13 +107,20 @@ if (dataParam) {
             <div className='mb-6'>
               <Button
                 className='my-9 w-[90%]'
-                onClick={() => mutation.mutate()}
+                onClick={() => mutation.mutate(Number(investmentData.id))}
                 loading={loading}
               >
               Fund Investment
             </Button>
             </div>
-            {showModal && <FundModal show={showModal} onClose={() => setShowModal(false)} />}
+            {showModal && paymentData && (
+  <FundModal
+    show={showModal}
+    onClose={() => setShowModal(false)}
+    paymentData={paymentData}
+  />
+)}
+
 
                   </div>
                 </div>

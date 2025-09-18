@@ -19,7 +19,7 @@ type ModalProps = {
   modalHeaderClass?: string;
   modalInnerClass?: string;
   dismissIcon?: boolean;
-  heading?: string;
+  heading?: string | React.ReactNode;
   footerButtonLabel?: string;
   footerButtonDisabled?: boolean;
   onFooterButtonClick?: () => void;
