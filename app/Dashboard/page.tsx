@@ -10,10 +10,13 @@ import MoneyIcon from "@/public/moneys.svg"
 import GraphIcon from "@/public/graph.svg"
 import DiagramIcon from "@/public/diagram.svg"
 import Banner from '@/components/Card/Banner';
-
+import ScreenLoader from '@/components/ScreenLoader/ScreenLoader';
+import Pagination from '@/components/Pagination/Pagination';
 export default function page() {
-  const { data } = Investments();
-  // console.log(data)
+  const { data, isLoading } = Investments();
+ if (isLoading) {
+    return <ScreenLoader />;
+  }
   return (
     <div>
       <div className='flex justify-end mb-3'>
@@ -53,7 +56,11 @@ export default function page() {
 />
       </div>
       </div>
-      <Banner data={ data?.data?.records} />
+       <Pagination
+        data={data?.data?.records || []}
+        itemsPerPage={3}
+        render={(currentRecords) => <Banner data={currentRecords} />}
+      />
     </div>
   )
 }

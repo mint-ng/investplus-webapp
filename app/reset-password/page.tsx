@@ -1,11 +1,13 @@
 "use client"
 import * as yup from "yup"
 import { Formik } from "formik";
-import CustomInput from "@/components/CustomInput/CustomInput";
 import Button from "@/components/Button/Button";
 import CustomPasswordInput from "@/components/CustomPasswordInput/CustomPasswordInput";
 import {PASSWORD_REGEX } from "@/constants";
 import Header from "@/components/Header/Header";
+import { useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
+import { usePasswordReset } from "../apis/mutations/use-complete-registration";
 
 const formValidationSchema = yup.object().shape({
     password: yup
@@ -23,6 +25,16 @@ const formValidationSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords must match"),
 });
 export default function Page() {
+  const Reset = usePasswordReset();
+  const searchParams = useSearchParams();
+  const sessionId = searchParams.get("sessionId");
+  const code = searchParams.get("code");
+
+  if (!sessionId) {
+  toast.error("Session expired. Please restart registration.");
+  return;
+}
+
      const initialFormValues = {
         password: "",
         confirmPassword: "",
@@ -34,7 +46,13 @@ export default function Page() {
             <Formik
                 initialValues={initialFormValues}
                 validationSchema={formValidationSchema}
-                onSubmit={(values)=>console.log(values)}
+                onSubmit={(values) =>
+          Reset.mutate({
+            sessionId,
+            password: values.confirmPassword,
+            code,
+          })
+        }
             >
                 {({ values, errors, touched, handleSubmit, handleChange }) => ( 
                     <form

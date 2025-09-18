@@ -8,6 +8,9 @@ export default {
     forgotPassword: "/api/v1/extranet/invest-pulse/send-reset-password-link",
     getInvestments: "/api/v1/extranet/invest-pulse/investments",
     getTenors: "/api/v2/common/investment-tenors",
+    payment: "/api/v1/extranet/invest-pulse/payment-reference",
+    resetPassword: "/api/v1/extranet/invest-pulse/reset-password",
+    fundInvestment: "/api/v1/extranet/invest-pulse/payment-reference"
     // getTenors: "/common/investment-tenors",
 
 }

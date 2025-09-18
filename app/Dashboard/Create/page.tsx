@@ -9,6 +9,8 @@ import Button from "@/components/Button/Button";
 import CustomSelect from "@/components/CustomSelect/CustomSelect";
 import useTenors from "@/app/apis/mutations/queries/get-tenors";
 import RedIcon from "@/public/red.svg"
+import { toast } from "react-toastify";
+import { useCreateInvestment } from "@/app/apis/mutations/get-create-investment";
 
 type Tenor = {
   durationId: number;
@@ -31,24 +33,45 @@ const formValidationSchema = yup.object().shape({
       .required("Select an investment duration"),
     referral: yup
       .string()
-      .trim()
-        .required("Enter a referral code"),
+      .trim(),
     terms: yup
         .boolean()
         .oneOf([true], "You must accept the terms and conditions"),
 });
 export default function Create() {
-    const router = useRouter();
+  const router = useRouter();
+  const createInvestment = useCreateInvestment();
     const { data: tenors, isLoading, isError } = useTenors();
     console.log(tenors)
 
       const initialFormValues = {
 		duration: "",
 		amount: "",
-		investDuration: 0,
+		investDuration: "",
 		referral: "",
         terms: false,
     };
+
+    const handleSubmit = async (values: typeof initialFormValues) => {
+    const payload = {
+      durationInMonths: Number(values.investDuration),
+        durationId: Number(values.duration),
+        investmentAmount: Number(values.amount),
+        referralCode: values.referral,
+    };
+
+    createInvestment.mutate(payload, {
+      onSuccess: (response) => {
+        toast.success("Investment created successfully!");
+         const serialized = encodeURIComponent(JSON.stringify(response));
+
+    router.push(`/Dashboard/Preview?data=${serialized}`);
+      },
+      onError: (error: any) => {
+        toast.error(error?.response?.data?.message || "Something went wrong");
+      },
+    });
+  };
     
   const tenorOptions =
   tenors?.map((t: Tenor) => {
@@ -63,8 +86,23 @@ export default function Create() {
       return {
       label: `${durationText} @ ${t.interestRate}% per annum, penalty: ${t.penaltyRate}% of accrued interest`,
       value: String(t.durationId),
+      key: `tenor-${t.durationId}`,
     };
   }) || [];
+
+ const investDurationOptions =
+  tenors?.map((t: Tenor, index: number) => {
+    const min = t.minimumDuration;
+    const max = t.maximumDuration;
+
+    return {
+      label: `${max} month(s) @ ${t.interestRate}% per annum`,
+      value: String(max), // we keep the max as the actual value
+      key: `duration-${t.durationId}-${max}`,
+    };
+  }) || [];
+
+  
 
     return (
       <>
@@ -76,9 +114,8 @@ export default function Create() {
              <Formik
                 initialValues={initialFormValues}
                 validationSchema={formValidationSchema}
-                 onSubmit={(values) => {
-    router.push(`/Dashboard/Preview?referral=${values.referral}`);
-  }}
+                 onSubmit={handleSubmit}
+
                       >
                           {({ values, errors, touched, handleSubmit, handleChange, setFieldValue }) => ( 
                               <form
@@ -95,7 +132,7 @@ export default function Create() {
                                 options={tenorOptions}
                                 value={values.duration}
                                 onChange={(val) => setFieldValue("duration", val)}
-                                placeholder="Select an option"
+                                placeholder="Select a duration"
             />
                                     <CustomInput
                                       label="How much would you like to invest?"
@@ -106,26 +143,14 @@ export default function Create() {
                                       name="amount"
                                       className="my-5"
                                   />
-                              {/* <CustomSelect
-                                label="Select Investment duration"
-                                options={options.map((opt) => ({
-                                label: opt.name,
-                                value: opt.id,
-                                }))}
-                                value={}
-                                onChange={}
-                                placeholder="Select an option"
-                        /> */}
+                                      <CustomSelect
+                                    label="Select Investment Duration"
+                                    options={investDurationOptions}
+                                    value={values.investDuration}
+                                    onChange={(val) => setFieldValue("investDuration", val)}
+                                    placeholder="Select investment duration"
+                                />
 
-                                <CustomInput
-                                      label="Select Investment duration"
-                                      placeholder="Enter your duration"
-                                      onChange={handleChange}
-                                      error={(touched.investDuration && errors.investDuration) || undefined}
-                                      value={values.investDuration}
-                                      name="investDuration"
-                                      className="my-5"
-                                  />
                                  
                         
                                     <CustomInput
@@ -180,11 +205,10 @@ export default function Create() {
                                   <Button
                                     type="submit"
                                     className="my-9 w-[80%] h-[20%] mx-auto"
-                                    // loading={AccountUpdate.isPending}
+                                    loading={createInvestment.isPending}
                                     disabled={!values.terms}
-                                    onClick={() => router.push("/Dashboard/Preview")}
                                 >
-                                    Proceed
+                                    Create Investment
                                 </Button>
                               </form>
                               

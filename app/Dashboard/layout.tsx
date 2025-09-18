@@ -8,9 +8,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
   const cookieStore = cookies();
     const Accesstoken = (await cookieStore).get(INVESTMENT_USER_TOKEN)?.value;
   console.log(INVESTMENT_USER_TOKEN)
-  const user = Cookies.get(INVESTMENT_USER_TOKEN);
 
-  // if (!user) redirect("/");
+  if (!Accesstoken) redirect("/");
 
       return <DashboardLayout>{children}</DashboardLayout>;
 }

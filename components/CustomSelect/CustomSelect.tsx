@@ -6,6 +6,7 @@ import ChevronDown from "@/public/chevron-down.svg"; // icon for dropdown
 type Option = {
   label: string;
   value: string;
+  key: string;
 };
 
 type Props = {
@@ -49,7 +50,7 @@ export default function CustomSelect({
         >
           <option value="">{placeholder}</option>
           {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
+            <option key={opt.key} value={opt.value}>
               {opt.label}
             </option>
           ))}

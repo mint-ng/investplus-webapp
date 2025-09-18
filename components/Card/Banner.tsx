@@ -37,7 +37,7 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
     <>
       {data.map((record: InvestmentRecord) => (
         <div
-          key={record.id}
+          key={record.expectedProfit}
           className="bg-white rounded-lg shadow-md p-15 pl-3 pt-6 my-4 border-l-4 border-blue-500"
         >
           <div className="flex justify-between items-start mb-12">

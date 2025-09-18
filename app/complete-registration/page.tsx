@@ -4,11 +4,10 @@ import { Formik } from "formik";
 import CustomInput from "@/components/CustomInput/CustomInput";
 import Button from "@/components/Button/Button";
 import CustomPasswordInput from "@/components/CustomPasswordInput/CustomPasswordInput";
-import { EMAIL_REGEX, PASSWORD_REGEX } from "@/constants";
+import { EMAIL_REGEX} from "@/constants";
 import Header from "@/components/Header/Header";
 import { useSearchParams } from "next/navigation";
 import { useCompleteRegistration } from "../apis/mutations/use-complete-registration";
-import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
 const formValidationSchema = yup.object().shape({
@@ -39,7 +38,7 @@ export default function CompleteRegistration() {
   const Complete = useCompleteRegistration();
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
-  const sessionId = Cookies.get("sessionId");
+  const sessionId = searchParams.get("sessionId");
   if (!sessionId) {
   toast.error("Session expired. Please restart registration.");
   return;

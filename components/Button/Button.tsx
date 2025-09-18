@@ -29,6 +29,12 @@ const buttonStyles = cva(
 					"disabled:bg-[#C9B37B]",
 					"disabled:hover:bg-none",
 				],
+				secondary: [
+					"bg-pink-100",
+					"text-[#7E5730]",
+					"disabled:bg-[#C9B37B]",
+					"disabled:hover:bg-none",
+				],
 				outline: ["bg-white", "border", "border-[#7E5730]", "text-black"],
 				link: [
 					"w-fit",
@@ -60,7 +66,7 @@ const buttonStyles = cva(
 
 type ButtonProps = {
   className?: string;
-  intent?: "primary" | "outline" | "link";
+  intent?: "primary" | "outline" | "link" | "secondary";
   loading?: boolean;
   disabled?: boolean;
   children: ReactNode;

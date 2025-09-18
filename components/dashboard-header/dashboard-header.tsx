@@ -91,12 +91,12 @@ export default function DashboardHeader({ isOpen, closeNav, className }: Props) 
                     if (dropdownIcon) dropdownIcon.classList.toggle("rotate-[180deg]");
                   }}
                 >
-                  <ProfilePicture
+                  {/* <ProfilePicture
                     name={userName ?? ""}
                     imageUrl={""}
                     className="xl:w-10 xl:h-10 w-8 h-8"
                     initialsClassName="xl:text-base text-sm"
-                  />
+                  /> */}
                   <span className="text-[15px] sm:text-base font-medium text-black text-ellipsis max-w-[60px] md:max-w-[unset] overflow-clip">
                     {userName}
                   </span>
