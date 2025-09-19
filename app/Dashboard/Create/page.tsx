@@ -1,7 +1,7 @@
 "use client"
 import * as yup from "yup"
 import { Formik } from "formik";
-import React from 'react'
+import React, {useState} from 'react'
 import Arrow from "@/public/left.svg"
 import { useRouter } from 'next/navigation'
 import CustomInput from "@/components/CustomInput/CustomInput";
@@ -40,9 +40,10 @@ const formValidationSchema = yup.object().shape({
 });
 export default function Create() {
   const router = useRouter();
+  const [minMax, setMinMax] = useState<{ min: number; max: number; interestRate: number } | null>(null);
   const createInvestment = useCreateInvestment();
-    const { data: tenors, isLoading, isError } = useTenors();
-    console.log(tenors)
+   const { data: tenors,  } = useTenors() as { data?: Tenor[] };
+
 
       const initialFormValues = {
 		duration: "",
@@ -73,34 +74,39 @@ export default function Create() {
     });
   };
     
+    // Tenor category options
   const tenorOptions =
-  tenors?.map((t: Tenor) => {
-    const min = t.minimumDuration;
-    const max = t.maximumDuration;
+    tenors?.map((t: Tenor) => {
+      const min = t.minimumDuration;
+      const max = t.maximumDuration;
 
-    const durationText =
-      min === max
-        ? `${min} month${min > 1 ? "s" : ""}`
-        : `${min}-${max} month(s)`;
+      const durationText =
+        min === max
+          ? `${min} month${min > 1 ? "s" : ""}`
+          : `${min}-${max} month(s)`;
 
       return {
-      label: `${durationText} @ ${t.interestRate}% per annum, penalty: ${t.penaltyRate}% of accrued interest`,
-      value: String(t.durationId),
-      key: `tenor-${t.durationId}`,
-    };
-  }) || [];
+        label: `${durationText} @ ${t.interestRate}% per annum, penalty: ${t.penaltyRate}% of accrued interest`,
+        value: String(t.durationId),
+        key: `tenor-${t.durationId}`,
+        min,
+        max,
+        interestRate: t.interestRate,
+      };
+    }) || [];
 
- const investDurationOptions =
-  tenors?.map((t: Tenor, index: number) => {
-    const min = t.minimumDuration;
-    const max = t.maximumDuration;
 
-    return {
-      label: `${max} month(s) @ ${t.interestRate}% per annum`,
-      value: String(max), // we keep the max as the actual value
-      key: `duration-${t.durationId}-${max}`,
-    };
-  }) || [];
+  // Build invest duration options from selected minMax
+  const investDurationOptions = minMax
+    ? Array.from({ length: minMax.max - minMax.min + 1 }, (_, i) => {
+        const month = minMax.min + i;
+        return {
+          label: `${month} month${month > 1 ? "s" : ""}`,
+          value: String(month),
+          key: `duration-${month}`,
+        };
+      })
+    : [];
 
   
 
@@ -131,7 +137,21 @@ export default function Create() {
                                 label="Duration Category"
                                 options={tenorOptions}
                                 value={values.duration}
-                                onChange={(val) => setFieldValue("duration", val)}
+                                onChange={(val) => {
+              setFieldValue("duration", val);
+
+              // Find the tenor and update state
+              const selectedTenor = tenorOptions.find((t) => t.value === val);
+              if (selectedTenor) {
+                setMinMax({
+                  min: selectedTenor.min,
+                  max: selectedTenor.max,
+                  interestRate: selectedTenor.interestRate,
+                });
+              } else {
+                setMinMax(null);
+              }
+            }}
                                 placeholder="Select a duration"
             />
                                     <CustomInput
@@ -143,13 +163,13 @@ export default function Create() {
                                       name="amount"
                                       className="my-5"
                                   />
-                                      <CustomSelect
-                                    label="Select Investment Duration"
-                                    options={investDurationOptions}
-                                    value={values.investDuration}
-                                    onChange={(val) => setFieldValue("investDuration", val)}
-                                    placeholder="Select investment duration"
-                                />
+                                       <CustomSelect
+            label="Select Investment Duration"
+            options={investDurationOptions}
+            value={values.investDuration}
+            onChange={(val) => setFieldValue("investDuration", val)}
+            placeholder="Select investment duration"
+          />
 
                                  
                         
