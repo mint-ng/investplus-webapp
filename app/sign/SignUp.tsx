@@ -52,6 +52,7 @@ export default function SignUp({onSuccess}:Props) {
                       <Button
                         // type="submit"
                             className="mt-4 w-full"
+                            disabled={values.phoneNumber.length !== 10}
                     >
                         Proceed
                         </Button>
