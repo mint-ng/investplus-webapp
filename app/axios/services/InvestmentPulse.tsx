@@ -14,11 +14,11 @@ const accessToken = Cookie.get(INVESTMENT_USER_TOKEN );
 
 InvestmentPulse.interceptors.request.use(
 	(config) => {
+		const accessToken = Cookie.get(INVESTMENT_USER_TOKEN);
 		config.headers["x-request-client-key"] = clientKey;
-		// config.headers["access-token"] = accessToken;
-		accessToken && (config.headers["access-token"] = accessToken);
-		// requestSignal = CancelToken.source();
-		// config.cancelToken = requestSignal.token;
+		  if (accessToken) {
+      config.headers["access-token"] = accessToken;
+    }
 		return config;
 	},
 	(error) => {
