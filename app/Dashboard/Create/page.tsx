@@ -132,43 +132,49 @@ export default function Create() {
                               }}
                                     
                           >
-                        <h2 className="mb-[19px] text-[18px] font-semibold border-b-1 border-[#DFDFDF] pb-3">Create Investment</h2>
-                             <CustomSelect
-                                label="Duration Category"
-                                options={tenorOptions}
-                                value={values.duration}
-                                onChange={(val) => {
-              setFieldValue("duration", val);
+                        <h2 className="mb-[19px] text-[16px] font-semibold border-b-1 border-[#DFDFDF] pb-3">Create Investment</h2>
+                                      <CustomSelect
+                                          label="Duration Category"
+                                          options={tenorOptions}
+                                          value={values.duration}
+                                          error={(touched.duration && errors.duration) || undefined}
+                                          onChange={(val) => {
+                                          setFieldValue("duration", val);                        
+                                          const selectedTenor = tenorOptions.find((t) => t.value === val);
+                                          if (selectedTenor) {
+                                            setMinMax({
+                                              min: selectedTenor.min,
+                                              max: selectedTenor.max,
+                                              interestRate: selectedTenor.interestRate,
+                                            });
+                                          } else {
+                                            setMinMax(null);
+                                          }
+                                        }}
+                      placeholder="Select a duration"
+                      />
+                  <CustomInput
+                  label="How much would you like to invest?"
+                  placeholder="Enter the amount"
+                  name="amount"
+                  className="my-5"
+                  error={(touched.amount && errors.amount) || undefined}
+                  value={values.amount ? `₦${values.amount}` : ""}
+                  onChange={(e) => {
+                    const rawValue = e.target.value.replace(/₦|,/g, "");
+                    if (!isNaN(Number(rawValue))) {
+                      setFieldValue("amount", rawValue);
+                    }
+                }}
+              />
 
-              // Find the tenor and update state
-              const selectedTenor = tenorOptions.find((t) => t.value === val);
-              if (selectedTenor) {
-                setMinMax({
-                  min: selectedTenor.min,
-                  max: selectedTenor.max,
-                  interestRate: selectedTenor.interestRate,
-                });
-              } else {
-                setMinMax(null);
-              }
-            }}
-                                placeholder="Select a duration"
-            />
-                                    <CustomInput
-                                      label="How much would you like to invest?"
-                                      placeholder="Enter the amount"
-                                      onChange={handleChange}
-                                      error={(touched.amount && errors.amount) || undefined}
-                                      value={values.amount}
-                                      name="amount"
-                                      className="my-5"
-                                  />
-                                       <CustomSelect
+          <CustomSelect
             label="Select Investment Duration"
             options={investDurationOptions}
             value={values.investDuration}
             onChange={(val) => setFieldValue("investDuration", val)}
             placeholder="Select investment duration"
+            error={(touched.investDuration && errors.investDuration) || undefined}
           />
 
                                  
@@ -182,9 +188,9 @@ export default function Create() {
                                       name="referral"
                                       className="my-5"
                                   />
-                                  <div className="flex gap-1 items-start bg-pink-100 p-1 w-[80%] rounded-[8px]">
+                                  <div className="flex gap-1 items-start bg-pink-100 p-1 w-[70%] rounded-[8px]">
                                     <RedIcon/>
-                                 <span className="text-[12px] text-[#FF466A]">A 10% withholding tax applies to your investment interest</span>            
+                                 <span className="text-[9px] text-[#FF466A]">A 10% withholding tax applies to your investment interest</span>            
                                     
                                   </div>
                                    <div className="flex items-center gap-2 my-5">
@@ -228,7 +234,7 @@ export default function Create() {
                                     loading={createInvestment.isPending}
                                     disabled={!values.terms}
                                 >
-                                    Create Investment
+                                    Proceed
                                 </Button>
                               </form>
                               

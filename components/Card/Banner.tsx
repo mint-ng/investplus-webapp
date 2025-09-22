@@ -1,10 +1,11 @@
 import React from "react";
-import { InvestmentRecord } from "@/constants"; // ✅ already defined in your project
+import { InvestmentRecord } from "@/constants";
 import Small from "@/public/small.svg"
+import NoTask from "@/public/NoTasks.svg"
 import Button from "../Button/Button";
 import { useRouter } from "next/navigation";
 type BannerProps = {
-  data?: InvestmentRecord[]; // ✅ accepts the array of records
+  data?: InvestmentRecord[];
 };
 
 const Banner: React.FC<BannerProps> = ({ data }) => {
@@ -17,8 +18,29 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
 };
 
   if (!data || data.length === 0) {
-    return <p className="text-gray-500">No investment records available</p>;
-  }
+  return (
+    <div className="bg-white rounded-lg shadow-md p-10 flex flex-col items-center justify-center text-center border-l-4 border-[#ADB1BA]">
+      <div className="mb-4">
+        {/* Replace with your actual empty-state icon */}
+        <NoTask />
+      </div>
+      <h3 className="text-lg font-semibold text-gray-800 mb-2">
+        No Investments Yet
+      </h3>
+      <p className="text-gray-500 mb-6 max-w-md">
+        You don't have any active investments yet. Create your first investment
+        today and start growing your wealth.
+      </p>
+      <Button
+        className="px-6 py-2 rounded-full bg-[#A47B38] text-white hover:bg-[#8C682F]"
+        onClick={() => router.push("/Dashboard/Create")}
+      >
+        + Create Investment
+      </Button>
+    </div>
+  );
+}
+
 
   const getStatusColor = (status: string) => {
     switch (status) {

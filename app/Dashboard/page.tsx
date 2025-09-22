@@ -17,6 +17,12 @@ export default function page() {
  if (isLoading) {
     return <ScreenLoader />;
   }
+  const activeInvestments =
+    data?.data?.records?.filter(
+      (record: any) => record.investmentStatus === "ACTIVE"
+    ) || [];
+
+  const activeCount = activeInvestments.length;
   return (
     <div>
       <div className='flex justify-end mb-3'>
@@ -34,7 +40,7 @@ export default function page() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 my-3">
          <DashboardStatCard
   title="Total Amount Invested"
-  value={data?.data?.totalAmount}
+  value={`₦${data?.data?.totalAmount ?? 0}`}
   icon={<MoneyIcon />}
   coverImage={DarkImage}
   isDarkImage={true}
@@ -42,20 +48,21 @@ export default function page() {
 
 <DashboardStatCard
   title="Expected Returns"
-  value={data?.data?.totalReturns}
-  icon={<GraphIcon />}
+  value={`₦${data?.data?.totalReturns ?? 0}`}
+  icon={<DiagramIcon />}
   coverImage={LightImage}
   isDarkImage={false}
           />
 <DashboardStatCard
   title="Number of Active Investments"
-  value={data?.data?.totalRecords}
-  icon={<DiagramIcon />}
+  value={activeCount ?? 0}
+  icon={<GraphIcon />}
   coverImage={LightImage}
   isDarkImage={false}
 />
       </div>
       </div>
+      <p className='text-[#000000] mb-2'>All Investments</p>
        <Pagination
         data={data?.data?.records || []}
         itemsPerPage={3}

@@ -41,7 +41,7 @@ export default function DashboardLayout({ children }: Props) {
       <main
         role="main"
         id="dashboard"
-        className="lg:pl-[330px] [@media(min-width:1440px)]:pl-[360px] pt-3 pb-10 bg-[#F6F6F6] min-h-[calc(100vh-100px)]"
+        className="lg:pl-[330px] [@media(min-width:1440px)]:pl-[400px] [@media(min-width:1680px)]:pl-[480px] pt-3 pb-10 bg-[#F6F6F6] min-h-[calc(100vh-100px)]"
       >
         {children}
       </main>
@@ -52,7 +52,7 @@ export default function DashboardLayout({ children }: Props) {
         onClick={closeNav}
       ></div>
 
-      <div className="lg:hidden flex items-center justify-center fixed top-[130px] right-4 z-[301]">
+      <div className="lg:hidden flex items-center justify-center fixed top-[70px] right-4 z-[301]">
         <button
           className="bg-transparent border-none w-fit h-fit p-0 min-w-[auto] min-h-[auto] relative"
           onClick={() => {

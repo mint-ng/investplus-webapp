@@ -26,7 +26,7 @@ export default function Sidebar({ isOpen, closeNav }: Props) {
       <nav
         data-transition="true"
         className={cn(`
-			fixed lg:absolute overflow-y-hidden w-[280px] lg:w-[284px] [@media(min-width:1440px)]:w-[380px] [@media(min-width:1680px)]:w-[440px] top-0 lg:left-0 pt-8 ml-1 pb-20 px-4 lg:pr-[24.25px] lg:pl-5 [@media(min-width:1440px)]:pl-[51.95px] lg:pb-12 hide-scroll-bar lg:h-full flex flex-col
+			fixed lg:absolute overflow-y-hidden w-[280px] lg:w-[284px] [@media(min-width:1440px)]:w-[340px] [@media(min-width:1680px)]:w-[440px] top-0 lg:left-0 pt-8 ml-1 pb-20 px-4 lg:pr-[24.25px] lg:pl-5 [@media(min-width:1440px)]:pl-[51.95px] lg:pb-12 hide-scroll-bar lg:h-full flex flex-col
 			lg:transition-none transition-[left] ease-in-out duration-[400ms] lg:min-h-[unset] min-h-full h-full z-[300] bg-white
 					${isOpen ? "left-0" : "left-[-100%]"}
 		`)}

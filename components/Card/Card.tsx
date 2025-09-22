@@ -5,7 +5,7 @@ import Image, { StaticImageData } from "next/image";
 
 type DashboardStatCardProps = {
   title: string;
-  value: number | undefined;
+  value: number | string;
   icon?: React.ReactNode;
   className?: string;
   coverImage?: StaticImageData; // ✅ new prop
