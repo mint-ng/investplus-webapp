@@ -10,6 +10,7 @@ type CustomInputProps = InputHTMLAttributes<HTMLInputElement> & {
   inputClass?: string;
   error?: string;
   phone?: boolean;
+  required?: boolean;
 };
 
 export default function CustomInput({
@@ -21,6 +22,7 @@ export default function CustomInput({
   placeholder,
   inputClass,
   error,
+  required,
   onBlur,
   phone = false,
   ...props
@@ -34,7 +36,7 @@ export default function CustomInput({
           htmlFor={props.id ? props.id : name}
           className="mb-1 text-base font-medium w-fit block text-[#111827]"
         >
-          {label}
+          {label}{" "} {required && <span className="text-red-500">*</span>}
         </label>
       )}
 

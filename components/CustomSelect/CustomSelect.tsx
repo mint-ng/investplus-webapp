@@ -17,6 +17,7 @@ type Props = {
   placeholder?: string;
   error?: string;
   className?: string;
+  required?: boolean;
 };
 
 export default function CustomSelect({
@@ -26,13 +27,14 @@ export default function CustomSelect({
   onChange,
   placeholder = "Select an option",
   error,
+  required,
   className,
 }: Props) {
   return (
     <div className={cn("w-full", className)}>
       {label && (
         <label className="mb-1 text-base font-medium w-fit block text-[#111827]">
-          {label}
+          {label}{" "} {required && <span className="text-red-500">*</span>}
         </label>
       )}
 

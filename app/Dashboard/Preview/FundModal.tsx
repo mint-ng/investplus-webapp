@@ -145,10 +145,13 @@ const FundModal = ({ show, onClose, onSuccess, paymentData }: ActivateInvestment
       }
     >
       <div className="w-full">
-        <div className="flex justify-between items-center text-sm mb-4">
-          <span className="text-gray-500">To activate Interest, please transfer the exact amount to the account below within</span>
-          <span className="text-[#F5A623] font-semibold">{formatTime(timer)}</span>
-        </div>
+       <div className="text-sm mb-4">
+  <span className="text-gray-500">
+    To activate Interest, please transfer the exact amount to the account below within{" "}
+    <span className="text-[#F5A623] font-semibold">{formatTime(timer)}</span>
+  </span>
+</div>
+
 
         <div className="bg-[#F9F9F9] border rounded-xl px-4 py-4 space-y-4">
           <div>

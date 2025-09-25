@@ -40,7 +40,7 @@ export default function page() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 my-3">
          <DashboardStatCard
   title="Total Amount Invested"
-  value={`₦${data?.data?.totalAmount ?? 0}`}
+  value={`₦${(data?.data?.totalAmount ?? 0).toLocaleString()}`}
   icon={<MoneyIcon />}
   coverImage={DarkImage}
   isDarkImage={true}
@@ -48,7 +48,7 @@ export default function page() {
 
 <DashboardStatCard
   title="Expected Returns"
-  value={`₦${data?.data?.totalReturns ?? 0}`}
+  value={`₦${(data?.data?.totalReturns ?? 0).toLocaleString()}`}
   icon={<DiagramIcon />}
   coverImage={LightImage}
   isDarkImage={false}
