@@ -8,7 +8,6 @@ import { logoutSession } from "@/app/redux/features/user-slice";
 import ProfileDropdownLinks from "../profileDropdown/profile-dropdown-links";
 import ChevronDownIcon from "@/public/chevron-down.svg"
 import { useOnClickOutside } from "usehooks-ts";
-import ProfilePicture from "../picture/profile";
 
 type Props = {
   isOpen: boolean;

@@ -5,12 +5,14 @@ import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { INVESTMENT_USER_TOKEN } from "@/constants";
 import ExpiredModal from "@/components/SessionModal/SessionModal";
-
+import { useAppSelector } from "./redux/features/use-store";
 export function IdleProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const { idleActive } = useAppSelector((state) => state.user);
   const [showModal, setShowModal] = useState(false);
 
   const handleOnIdle = () => {
+    if (!idleActive) return;
     setShowModal(true);
     Cookies.set("sessionExpired", "true", { path: "/" });
   };
@@ -34,6 +36,7 @@ export function IdleProvider({ children }: { children: React.ReactNode }) {
       // timeout={1000 * 20}
       onIdle={handleOnIdle}
       debounce={500}
+      disabled={!idleActive}
     >
       {children}
 

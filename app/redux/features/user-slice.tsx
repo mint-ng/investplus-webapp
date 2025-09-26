@@ -7,6 +7,7 @@ import { INVESTMENT_USER, INVESTMENT_USER_TOKEN } from "@/constants";
 export interface userType {
   userName: null | string;
   isAuth: string;
+  idleActive: boolean;
 }
 interface LoginPayload {
   name: string;
@@ -16,6 +17,7 @@ interface LoginPayload {
 const initialState: userType = {
   userName: Cookie.get(INVESTMENT_USER) || null,
   isAuth: Cookie.get(INVESTMENT_USER_TOKEN) || "",
+  idleActive: true,
 };
 
 const userSlice = createSlice({
@@ -40,9 +42,16 @@ const userSlice = createSlice({
 
             state.userName = null;
             state.isAuth = "";
-        },
+      },
+      enableIdle: (state) => {
+      state.idleActive = true;
+    },
+
+    disableIdle: (state) => {
+      state.idleActive = false;
+    },
     }
 });
 
 export default userSlice.reducer;
-export const { loginSession, logoutSession } = userSlice.actions
+export const { loginSession, logoutSession, enableIdle, disableIdle } = userSlice.actions

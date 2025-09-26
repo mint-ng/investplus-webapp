@@ -8,7 +8,8 @@ import { useCheckFunding } from '@/app/apis/mutations/queries/get-funded';
 import PendingTransferModal from './PendingModal';
 import SuccessfulTransferModal from './SuccessfulTransferModal';
 import { useRouter } from "next/navigation";
-import { BsBackpack3 } from 'react-icons/bs';
+import { enableIdle, disableIdle } from '@/app/redux/features/user-slice';
+import { useDispatch } from "react-redux";
 
 type PaymentData = {
   paymentReference: string;
@@ -35,7 +36,16 @@ const FundModal = ({ show, onClose, onSuccess, fromDashboard, paymentData }: Act
   const { mutate: checkFundingMutate } = useCheckFunding();
   const [loading, setLoading] = useState(false);
   const [fundingStatus, setFundingStatus] = useState<string | null>(null);
-  const router = useRouter()
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+  if (fundingStatus === "PENDING") {
+    dispatch(disableIdle());
+  } else if (fundingStatus === "SUCCESSFUL") {
+    dispatch(enableIdle());
+  }
+}, [fundingStatus, dispatch]);
 
 
   useEffect(() => {
