@@ -9,9 +9,12 @@ import { fundInvestment } from '@/app/apis/mutations/get-fund-investment';
 import { toast } from "react-toastify";
 import { useMutation } from '@tanstack/react-query';
 import FundModal from './FundModal';
+import { disableIdle, enableIdle } from '@/app/redux/features/user-slice';
+import { useDispatch } from "react-redux";
 
 export default function Preview() {
-    const router = useRouter();
+  const router = useRouter();
+  const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -47,7 +50,15 @@ useEffect(() => {
     setLoading(false);
     toast.error(err?.response?.data?.message || "Funding failed");
   },
-});
+  });
+  
+  useEffect(() => {
+    if (showModal) {
+      dispatch(disableIdle());
+    } else {
+      dispatch(enableIdle());
+    }
+  }, [showModal, dispatch]);
 
   
   useEffect(() => {

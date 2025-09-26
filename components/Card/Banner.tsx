@@ -4,6 +4,7 @@ import Small from "@/public/small.svg"
 import NoTask from "@/public/NoTasks.svg"
 import Button from "../Button/Button";
 import { useRouter } from "next/navigation";
+import RedIcon from "@/public/red.svg";
 type BannerProps = {
   data?: InvestmentRecord[];
 };
@@ -77,7 +78,7 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
             key={record.expectedProfit}
            className={`bg-white rounded-lg shadow-md p-15 pl-3 pt-6 my-4 border-l-4 ${borderColor}`}
           >
-            <div className="flex justify-between items-start mb-12">
+            <div className="flex justify-between items-start mb-7">
               <h2 className="text-[18px] font-medium">
                 Investment Details
               </h2>
@@ -103,6 +104,19 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
               </div>
 
             </div>
+{record.investmentStatus === "INACTIVE" && (
+  <div className="bg-red-50 border border-red-200 text-red-600 text-[11px] rounded-[10px] mb-6 flex items-center gap-2 max-w-[380px] p-1">
+    <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
+      <RedIcon className="w-4 h-4" />
+    </div>
+    <span className="leading-snug">
+      We are processing your transaction. Once payment is confirmed, your investment metrics
+      will be updated, hence active.
+    </span>
+  </div>
+)}
+
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
               <div className="grid grid-cols-2 gap-y-6">
@@ -123,7 +137,7 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500 mb-2">Estimated profit at maturity</p>
-                  <p className="font-semibold text-gray-900 mb-3">
+                  <p className="font-semibold text-gray-900 mb-2">
                     ₦{record.expectedProfit.toLocaleString()}
                   </p>
                   <p className="text-xs text-[#808080]">
@@ -138,7 +152,7 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
                 <div>
                   <p className="text-sm text-gray-500">Accrued profit as at today</p>
                   <p className="font-semibold text-gray-900">
-                  
+                  ₦{record.expectedProfit.toLocaleString()}
                   </p>
                 </div>
                 <div>

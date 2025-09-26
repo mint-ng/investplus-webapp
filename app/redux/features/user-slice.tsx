@@ -31,7 +31,7 @@ const userSlice = createSlice({
 
             state.userName = name;
             state.isAuth = accessToken;
-
+            state.idleActive = true;
             action.payload.callback?.();
         },
 

@@ -10,6 +10,7 @@ import SuccessfulTransferModal from './SuccessfulTransferModal';
 import { useRouter } from "next/navigation";
 import { enableIdle, disableIdle } from '@/app/redux/features/user-slice';
 import { useDispatch } from "react-redux";
+import PendingConfirmationModal from './PendingConfirmationModal';
 
 type PaymentData = {
   paymentReference: string;
@@ -36,16 +37,24 @@ const FundModal = ({ show, onClose, onSuccess, fromDashboard, paymentData }: Act
   const { mutate: checkFundingMutate } = useCheckFunding();
   const [loading, setLoading] = useState(false);
   const [fundingStatus, setFundingStatus] = useState<string | null>(null);
+  const [showPendingConfirm, setShowPendingConfirm] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-  if (fundingStatus === "PENDING") {
-    dispatch(disableIdle());
-  } else if (fundingStatus === "SUCCESSFUL") {
-    dispatch(enableIdle());
-  }
-}, [fundingStatus, dispatch]);
+   useEffect(() => {
+    if (fundingStatus === "PENDING") {
+      dispatch(disableIdle());
+
+      // start 5-minute timeout
+      const timeout = setTimeout(() => {
+        setShowPendingConfirm(true);
+      }, 5 * 60 * 1000);
+
+      return () => clearTimeout(timeout);
+    } else if (fundingStatus === "SUCCESSFUL") {
+      dispatch(enableIdle());
+    }
+  }, [fundingStatus, dispatch]);
 
 
   useEffect(() => {
@@ -234,6 +243,11 @@ console.log(fromDashboard)
           onClose();
         }}
       />
+      <PendingConfirmationModal
+  show={showPendingConfirm}
+  onClose={() => setShowPendingConfirm(false)}
+/>
+
     </>
   )
 }
