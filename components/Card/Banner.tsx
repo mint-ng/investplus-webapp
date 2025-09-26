@@ -10,6 +10,7 @@ type BannerProps = {
 
 const Banner: React.FC<BannerProps> = ({ data }) => {
   const router = useRouter();
+  const dismiss = true
 
   const handleFundInvestment = (record: InvestmentRecord) => {
   // serialize record into query string
@@ -52,28 +53,36 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
         return "bg-gray-100 text-gray-700";
     }
     };
+    
+   const getBorderColor = (status: string) => {
+    switch (status) {
+      case "ACTIVE":
+        return "border-green-500";
+      case "INACTIVE":
+        return "border-blue-500";
+      case "MATURED":
+        return "border-yellow-500";
+      default:
+        return "border-gray-400";
+    }
+  };
 
   return (
     <>
       {data.map((record: InvestmentRecord) => (
         <div
           key={record.expectedProfit}
-          className="bg-white rounded-lg shadow-md p-15 pl-3 pt-6 my-4 border-l-4 border-blue-500"
+           className={`bg-white rounded-lg shadow-md p-15 pl-3 pt-6 my-4 border-l-4 ${getBorderColor(
+            record.investmentStatus
+          )}`}
         >
           <div className="flex justify-between items-start mb-12">
             <h2 className="text-[18px] font-medium">
                Investment Details
             </h2>
            <div className="flex items-center gap-3">
-  <span
-    className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
-      record.investmentStatus
-    )}`}
-  >
-    {record.investmentStatus.toLowerCase()}
-  </span>
-
-  {record.investmentStatus === "INACTIVE" && (
+            
+      {record.investmentStatus === "INACTIVE" && (
     <Button
     className='w-[180px] h-[40px] text-sm font-medium'
      onClick={() => handleFundInvestment(record)}
@@ -81,6 +90,15 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
       + Fund Investment
     </Button>
   )}
+  <span
+    className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
+      record.investmentStatus
+    )}`}
+  >
+     {record.investmentStatus.charAt(0).toUpperCase() +
+    record.investmentStatus.slice(1).toLowerCase()}
+  </span>
+
 </div>
 
           </div>

@@ -20,7 +20,6 @@ export default function Preview() {
   const fromDashboard = searchParams.get("fromDashboard") === "true";
   const [investmentData, setInvestmentData] = useState<any>(null);
 
-
 useEffect(() => {
     const dataParam = searchParams.get("data");
     if (dataParam) {
@@ -40,7 +39,7 @@ useEffect(() => {
   },
   onSuccess: (res) => {
     setLoading(false);
-    toast.success("Investment funded successfully!");
+    toast.success(res?.message || "Investment funded successfully!");
     setShowModal(true);
     setPaymentData(res.data);
   },
@@ -118,6 +117,7 @@ useEffect(() => {
     show={showModal}
     onClose={() => setShowModal(false)}
     paymentData={paymentData}
+    fromDashboard={fromDashboard}
   />
 )}
 

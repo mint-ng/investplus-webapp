@@ -8,6 +8,7 @@ import { useCheckFunding } from '@/app/apis/mutations/queries/get-funded';
 import PendingTransferModal from './PendingModal';
 import SuccessfulTransferModal from './SuccessfulTransferModal';
 import { useRouter } from "next/navigation";
+import { BsBackpack3 } from 'react-icons/bs';
 
 type PaymentData = {
   paymentReference: string;
@@ -25,9 +26,10 @@ type ActivateInvestmentModalProps = {
   onClose: () => void;
   onSuccess?: () => void;
   paymentData: PaymentData;
+  fromDashboard:boolean
 }
 
-const FundModal = ({ show, onClose, onSuccess, paymentData }: ActivateInvestmentModalProps) => {
+const FundModal = ({ show, onClose, onSuccess, fromDashboard, paymentData }: ActivateInvestmentModalProps) => {
   const [timer, setTimer] = useState(Number(paymentData.expiryTime));
   const [expired, setExpired] = useState(false);
   const { mutate: checkFundingMutate } = useCheckFunding();
@@ -96,15 +98,25 @@ const FundModal = ({ show, onClose, onSuccess, paymentData }: ActivateInvestment
   }).catch(() => {
     toast.error("Failed to copy!");
   });
+  }
+  
+  function Back() {
+  if (fromDashboard) {
+    router.push("/Dashboard");
+  } else {
+    onClose();
+  }
 }
 
+console.log(fromDashboard)
 
   return (
     <>
     <Modal
       show={show}
-      onClose={onClose}
-      closeIcon={false}
+      shouldCloseOnOverlayClick={!fromDashboard}
+      onClose={Back}
+      closeIcon={fromDashboard}
       size="sm"
       heading={
     <div className="flex justify-between items-center w-full gap-20">
