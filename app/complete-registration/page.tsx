@@ -34,7 +34,7 @@ const formValidationSchema = yup.object().shape({
     .boolean()
     .oneOf([true], "You must accept the terms and conditions"),
 });
-export default function CompleteRegistration() {
+export default function Page() {
   const Complete = useCompleteRegistration();
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
