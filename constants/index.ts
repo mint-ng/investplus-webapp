@@ -71,6 +71,7 @@ export interface InvestmentRecord {
   expectedReturn: number;
   expectedProfit: number;
   daysLeftToMaturity: number;
+  accruedInterest:number
 }
 
 export interface InvestmentResponse {

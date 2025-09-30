@@ -119,23 +119,23 @@ const FundModal = ({ show, onClose, onSuccess, fromDashboard, paymentData }: Act
   });
   }
   
-  function Back() {
-  if (fromDashboard) {
-    router.push("/Dashboard");
-  } else {
-    onClose();
-  }
-}
+//   function Back() {
+//   if (fromDashboard) {
+//     router.push("/Dashboard");
+//   } else {
+//     onClose();
+//   }
+// }
 
-console.log(fromDashboard)
+// console.log(fromDashboard)
 
   return (
     <>
     <Modal
       show={show}
-      shouldCloseOnOverlayClick={!fromDashboard}
-      onClose={Back}
-      closeIcon={fromDashboard}
+      shouldCloseOnOverlayClick={false}
+      onClose={onClose}
+      closeIcon={true}
       size="sm"
       heading={
     <div className="flex justify-between items-center w-full gap-20">
@@ -210,7 +210,7 @@ console.log(fromDashboard)
           <div className="flex justify-between items-center">
             <div>
               <p className="text-xs text-gray-500">Amount</p>
-              <p className="font-medium">{paymentData.amount}</p>
+              <p className="font-medium">₦{paymentData.amount.toLocaleString()}</p>
             </div>
             <button className='cursor-pointer' onClick={() => copyToClipboard(String(paymentData.amount))}>
               <Copy />

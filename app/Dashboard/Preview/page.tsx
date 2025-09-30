@@ -22,13 +22,22 @@ export default function Preview() {
   const investmentId = searchParams.get("id");
   const fromDashboard = searchParams.get("fromDashboard") === "true";
   const [investmentData, setInvestmentData] = useState<any>(null);
+  const [isTopup, setIsTopup] = useState(false);
+
 
 useEffect(() => {
     const dataParam = searchParams.get("data");
     if (dataParam) {
       try {
         const parsed = JSON.parse(decodeURIComponent(dataParam));
-        setInvestmentData(parsed.data);
+          const cleanData = {
+        ...parsed.data,
+        durationCategory: parsed.data.durationCategory?.replace(/^Flex\s*/i, "")
+      };
+        setInvestmentData(cleanData);
+        if (parsed.topup) {
+        setIsTopup(true);
+      }
       } catch (err) {
         console.error("Failed to parse investment data", err);
       }
@@ -36,10 +45,9 @@ useEffect(() => {
   }, [searchParams]);
   
   const mutation = useMutation({
-  mutationFn: (id: number) => fundInvestment({ investmentCode: id }),
-  onMutate: () => {
-    setLoading(true);
-  },
+  mutationFn: (vars: { investmentCode: number; amount?: number }) => 
+    fundInvestment(vars),
+  onMutate: () => setLoading(true),
   onSuccess: (res) => {
     setLoading(false);
     toast.success(res?.message || "Investment funded successfully!");
@@ -50,7 +58,8 @@ useEffect(() => {
     setLoading(false);
     toast.error(err?.response?.data?.message || "Funding failed");
   },
-  });
+});
+
   
   useEffect(() => {
     if (showModal) {
@@ -61,16 +70,19 @@ useEffect(() => {
   }, [showModal, dispatch]);
 
   
-  useEffect(() => {
-    if (fromDashboard && investmentData?.id) {
-      mutation.mutate(Number(investmentData.id));
-    }
-  }, [fromDashboard, investmentData]);
+  // useEffect(() => {
+  //   if (fromDashboard && investmentData?.id) {
+  //     mutation.mutate(Number(investmentData.id));
+  //   }
+  // }, [fromDashboard, investmentData]);
 
 
   return (
       <>
-         <div className='flex gap-1 mt-6 cursor-pointer' onClick={() => router.push("/Dashboard/Create")}>
+      <div
+        className='flex gap-1 mt-6 cursor-pointer'
+         onClick={() => router.push(fromDashboard ? "/Dashboard" : "/Dashboard/Create")}
+      >
           <Arrow />
           <p>Back to investment</p>
           </div>
@@ -96,7 +108,7 @@ useEffect(() => {
                       <h3 className='text-[14px]'>
                         Amount Invested
                       </h3>
-                      {investmentData?.amountInvested}
+                      ₦{investmentData?.amountInvested.toLocaleString()}
                     </div>
                     <div className='flex flex-col gap-1 my-3'>
                       <h3 className='text-[14px]'>
@@ -110,17 +122,26 @@ useEffect(() => {
                       </h3>
                       {investmentData?.referralCode}
             </div>} 
-            <div className="flex flex-col gap-1 mb-8">
+          {investmentData?.investorName && <div className="flex flex-col gap-1 mb-8">
               <h3 className="text-[14px]">Investor</h3>
               {investmentData?.investorName}
-            </div>
+            </div>}  
             <div className='mb-6'>
               <Button
                 className='my-9 w-[90%]'
-                onClick={() => mutation.mutate(Number(investmentData.id))}
+                onClick={() => {
+    if (isTopup) {
+      mutation.mutate({
+        investmentCode: Number(investmentData.id),
+        amount: investmentData.amountInvested,
+      });
+    } else {
+      mutation.mutate({ investmentCode: Number(investmentData.id) });
+    }
+  }}
                 loading={loading}
               >
-              Fund Investment
+              {isTopup ? "Top up Investment" : "Fund Investment"}
             </Button>
             </div>
             {showModal && paymentData && (

@@ -1,16 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
 import { InvestmentRecord } from "@/constants";
 import Small from "@/public/small.svg"
 import NoTask from "@/public/NoTasks.svg"
 import Button from "../Button/Button";
 import { useRouter } from "next/navigation";
 import RedIcon from "@/public/red.svg";
+import TopUpModal from "@/app/Dashboard/Preview/TopUpModal";
+
 type BannerProps = {
   data?: InvestmentRecord[];
 };
 
 const Banner: React.FC<BannerProps> = ({ data }) => {
   const router = useRouter();
+  const [show, setShow] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState<InvestmentRecord | null>(null);
   const dismiss = true
 
   const handleFundInvestment = (record: InvestmentRecord) => {
@@ -92,6 +96,17 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
                     + Fund Investment
                   </Button>
                 )}
+                {record.investmentStatus === "ACTIVE" && (
+                  <Button
+                    className='w-[180px] h-[40px] text-sm font-medium'
+                     onClick={() => {
+                    setSelectedRecord(record);
+                    setShow(true);
+        }}
+                  >
+                    + Top up Investment
+                  </Button>
+                )}
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
                     record.investmentStatus
@@ -152,7 +167,7 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
                 <div>
                   <p className="text-sm text-gray-500">Accrued profit as at today</p>
                   <p className="font-semibold text-gray-900">
-                  ₦{record.expectedProfit.toLocaleString()}
+                  ₦{record.accruedInterest.toLocaleString()}
                   </p>
                 </div>
                 <div>
@@ -187,6 +202,18 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
 
         )
       })}
+<TopUpModal
+  show={show}
+  onClose={() => setShow(false)}
+  onSubmit={(amount) => {
+    if (!selectedRecord) return;
+    const encoded = encodeURIComponent(
+      JSON.stringify({ data: { ...selectedRecord, amountInvested: amount }, topup: true })
+    );
+    router.push(`/Dashboard/Preview?data=${encoded}&fromDashboard=true`);
+  }}
+/>
+
     </>
   );
 };
