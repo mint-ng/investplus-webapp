@@ -161,7 +161,7 @@ export default function Create() {
               required
               className="my-5"
               error={(touched.amount && errors.amount) || undefined}
-              value={values.amount ? `₦${values.amount}` : ""}
+               value={ values.amount ? `₦${Number(values.amount).toLocaleString("en-NG")}`: ""}
               onChange={(e) => {
                 const rawValue = e.target.value.replace(/₦|,/g, "");
                 if (!isNaN(Number(rawValue))) {

@@ -70,16 +70,20 @@ function TopupForm({
             label="How much would you like to top up?"
             placeholder="Enter an amount"
             error={(touched.amount && errors.amount) || undefined}
-            value={values.amount}
+            value={
+    values.amount
+      ? `₦${Number(values.amount).toLocaleString("en-NG")}`
+      : ""
+  }
             name="amount"
             onChange={(e) => {
-              const value = e.target.value.replace(/\D/g, ""); // only numbers
-              if (value.length <= 11) {
-                handleChange({
-                  target: { name: "amount", value },
-                });
-              }
-            }}
+    const rawValue = e.target.value.replace(/\D/g, ""); // only digits
+    if (rawValue.length <= 11) {
+      handleChange({
+        target: { name: "amount", value: rawValue }, // keep raw number in Formik
+      });
+    }
+  }}
           />
 
           <Button type="submit" className="mt-4 w-full">
