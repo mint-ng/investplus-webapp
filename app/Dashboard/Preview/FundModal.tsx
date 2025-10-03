@@ -126,9 +126,7 @@ const FundModal = ({ show, onClose, onSuccess, fromDashboard, paymentData }: Act
 
             clearInterval(interval);
 
-            setTimeout(() => {
-              router.push("/Dashboard");
-            }, 2000);
+            
           }
         },
       }
