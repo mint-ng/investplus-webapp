@@ -93,7 +93,7 @@ export const profileDropdownLinks: { title: string; path: string }[] = [
     path: "",
   },
    {
-    title: "Change Password",
+    title: "Reset Password",
     path: "/forgot-password",
   },
 ];

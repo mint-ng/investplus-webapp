@@ -141,12 +141,12 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
                     ₦{record.amountInvested.toLocaleString()}
                   </p>
                   <p className="text-xs text-[#808080]">
-                    Started on{" "}
-                    {new Date(record.dateCreated).toLocaleDateString("en-US", {
+                    Started on:{" "}
+                    {record.investmentStatus ==="ACTIVE" ? new Date(record.dateCreated).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
-                    })}
+                    }) : "N/A"}
                   </p>
 
                 </div>
@@ -156,18 +156,21 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
                     ₦{record.expectedProfit.toLocaleString()}
                   </p>
                   <p className="text-xs text-[#808080]">
-                    matures{" "}
-                    {new Date(record.maturityDate).toLocaleDateString("en-US", {
+                    matures:{" "}
+                {record.investmentStatus ==="ACTIVE" ? new Date(record.maturityDate).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
-                    })}
+                    })  :"N/A" }   
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Accrued profit as at today</p>
                   <p className="font-semibold text-gray-900">
-                  ₦{record.accruedInterest.toLocaleString()}
+              {record.investmentStatus === "ACTIVE" 
+  ? `₦${record.accruedInterest.toLocaleString()}` 
+  : "N/A"}
+  
                   </p>
                 </div>
                 <div>
@@ -194,10 +197,10 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
            
             </div>
 
-            <div className="mt-4 text-sm text-gray-500 flex items-center gap-1">
+         {record.investmentStatus === "ACTIVE" && <div className="mt-4 text-sm text-gray-500 flex items-center gap-1">
               <Small />
               <p>{record.daysLeftToMaturity} days left for your investment to mature</p>
-            </div>
+            </div>}   
           </div>
 
         )

@@ -12,6 +12,7 @@ const SuccessfulTransferModal = ({ show, onClose }: SuccessfulTransferModalProps
       show={show}
       onClose={onClose}
       closeIcon={false}
+      shouldCloseOnOverlayClick={false}
       size="sm"
     >
       <div className="flex flex-col items-center justify-center py-8 space-y-6">

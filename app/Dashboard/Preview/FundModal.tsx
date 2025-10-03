@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { enableIdle, disableIdle } from '@/app/redux/features/user-slice';
 import { useDispatch } from "react-redux";
 import PendingConfirmationModal from './PendingConfirmationModal';
+import SuccessModal from './SuccessModal';
 
 type PaymentData = {
   paymentReference: string;
@@ -38,8 +39,40 @@ const FundModal = ({ show, onClose, onSuccess, fromDashboard, paymentData }: Act
   const [loading, setLoading] = useState(false);
   const [fundingStatus, setFundingStatus] = useState<string | null>(null);
   const [showPendingConfirm, setShowPendingConfirm] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showTransferSuccess, setShowTransferSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  
   const router = useRouter();
   const dispatch = useDispatch();
+
+  // Trigger SUCCESSFUL modal 10s after PENDING
+// useEffect(() => {
+//   if (fundingStatus === "PENDING") {
+//     const successTimeout = setTimeout(() => {
+//       setFundingStatus("SUCCESSFUL"); 
+//       toast.success("Funding auto-confirmed (test mode)");
+//     }, 10000); // 10 seconds
+
+//     return () => clearTimeout(successTimeout);
+//   }
+// }, [fundingStatus]);
+
+  
+  useEffect(() => {
+  if (fundingStatus === "SUCCESSFUL") {
+    // Show SuccessfulTransferModal immediately
+    setShowTransferSuccess(true);
+
+    // After 5 seconds, hide it and show SuccessModal
+    const timer = setTimeout(() => {
+      setShowTransferSuccess(false);
+      setShowSuccessModal(true);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }
+}, [fundingStatus]);
 
    useEffect(() => {
     if (fundingStatus === "PENDING") {
@@ -88,6 +121,7 @@ const FundModal = ({ show, onClose, onSuccess, fromDashboard, paymentData }: Act
           const status = res?.data?.status || res?.status;
           if (status === "SUCCESSFUL") {
             setFundingStatus("SUCCESSFUL");
+            setSuccessMessage(res?.data?.message || "Transaction successful! ✅");
             toast.success("Funding confirmed!");
 
             clearInterval(interval);
@@ -237,12 +271,22 @@ const FundModal = ({ show, onClose, onSuccess, fromDashboard, paymentData }: Act
 
       {/* SUCCESSFUL Modal */}
       <SuccessfulTransferModal
-        show={show && fundingStatus === "SUCCESSFUL"}
+         show={show && showTransferSuccess}
         onClose={() => {
-          setFundingStatus(null);
-          onClose();
-        }}
+    setShowTransferSuccess(false);
+    onClose();
+  }}
       />
+    <SuccessModal
+  show={showSuccessModal}
+  onClose={() => {
+    setShowSuccessModal(false);
+    setFundingStatus(null);
+    onClose();
+  }}
+  message={successMessage ?? "Your transaction is successful."}
+/>
+
       <PendingConfirmationModal
   show={showPendingConfirm}
   onClose={() => setShowPendingConfirm(false)}

@@ -30,11 +30,15 @@ export default function page() {
           + Create investment
         </Button>
       </div>
-      <div className='max-w-[400px] p-1 bg-[#0000000D] text-[10px] rounded-[10px] flex gap-1 items-center'>
-        <Exclamation />
-       <p>A temporary account will be created prior to setting up the Mintyn account, <br/>
-        after which your investment will be transferred to the Mintyn account'</p> 
-      </div>
+      <div className="max-w-[450px] p-1 bg-[#0000000D] text-[10px] rounded-[10px] flex gap-1 items-start">
+  <Exclamation className="mt-1 shrink-0" />
+  <p className="leading-relaxed">
+    Your investment is secure with Mintyn. To manage or liquidate it, please open a <br />
+    Mintyn account. Once active, your investment will be linked, and all returns
+    safely credited directly to your Mintyn account.
+  </p>
+</div>
+
 
       <div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 my-3">

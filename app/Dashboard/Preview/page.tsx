@@ -81,7 +81,7 @@ useEffect(() => {
       <>
       <div
         className='flex gap-1 mt-6 cursor-pointer'
-         onClick={() => router.push(fromDashboard ? "/Dashboard" : "/Dashboard/Create")}
+         onClick={() => router.push("/Dashboard")}
       >
           <Arrow />
           <p>Back to investment</p>
