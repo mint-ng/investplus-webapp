@@ -19,6 +19,7 @@
     "next": "15.5.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-freshchat": "^1.0.10",
     "react-icons": "^5.5.0",
     "react-idle-timer": "^5.7.2",
     "react-modal": "^3.16.3",

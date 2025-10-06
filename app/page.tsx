@@ -30,14 +30,14 @@ export default function Home() {
                 Sign Up
               </Button>
             </div>
-           <a
+           {/* <a
   href="https://mintyn.com/contact-us/"
   target="_blank"
   rel="noopener noreferrer"
   className="text-[#7E5730] underline"
 >
   Contact Support
-</a>
+</a> */}
           </div>
         </div>
       </div>

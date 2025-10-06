@@ -12,6 +12,7 @@ import DiagramIcon from "@/public/diagram.svg"
 import Banner from '@/components/Card/Banner';
 import ScreenLoader from '@/components/ScreenLoader/ScreenLoader';
 import Pagination from '@/components/Pagination/Pagination';
+import WebChatWidget from '@/components/WebChat/ChatWidget';
 export default function page() {
   const { data, isLoading } = Investments();
  if (isLoading) {
@@ -64,7 +65,9 @@ export default function page() {
   coverImage={LightImage}
   isDarkImage={false}
 />
-      </div>
+        </div>
+    <WebChatWidget />
+        
       </div>
       <p className='text-[#000000] mb-2'>All Investments</p>
        <Pagination

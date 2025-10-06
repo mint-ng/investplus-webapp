@@ -1,0 +1,1 @@
+export const freshChatToken = "b64f82cf-4828-4f67-b60c-1c24c81336ef";
