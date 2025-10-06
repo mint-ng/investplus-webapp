@@ -30,7 +30,7 @@ export default function SignUp({onSuccess}:Props) {
           >
               {({ values, errors, touched, handleSubmit, handleChange }) => ( 
                   <form
-                      className="max-w-[497px] mx-auto mt-[94px] text-center"
+                      className="max-w-[497px] mx-auto mt-[94px] text-center px-3 px-0"
                     onSubmit={(e) => {
                         e.preventDefault();
                         handleSubmit();

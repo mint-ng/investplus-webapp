@@ -1,7 +1,7 @@
 import ReactModal from "react-modal"
 import { cn } from "@/lib/utils";
 import Button from "../Button/Button";
-import CloseIcon from "@/public/cancel.svg";
+import CloseIcon from "@/public/x.svg";
 import Image from "next/image";
 import styles from "./Modal.module.scss";
 

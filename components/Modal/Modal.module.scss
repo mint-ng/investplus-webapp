@@ -119,8 +119,8 @@
         >button {
             margin-left: auto;
             display: flex;
-            height: fit-content;
-            width: fit-content;
+            width: 32px; // ensure a square clickable area
+            height: 32px;
             align-items: center;
             justify-content: center;
 
@@ -129,8 +129,8 @@
             // }
 
             svg {
-                width: 14px;
-                height: 14px;
+                width: 18px;
+                height: 18px;
             }
         }
     }
