@@ -1,12 +1,15 @@
+"use client";
 import Image from "next/image";
 // import Fintech from "../public/InvestPulse.png";
 import LoginForm from "@/components/Login/LoginForm";
 import Button from "@/components/Button/Button";
 import Header from "@/components/Header/Header"
+import WebChatWidget from "@/components/WebChat/ChatWidget";
 export default function Home() {
   return (
     <div className="min-h-screen bg-main">
       <Header />
+      <WebChatWidget />
       <div className=" w-full h-full flex justify-center items-center mt-[94px] px-3 sm:px-0">
         <div className="max-w-[497px]">
           <p className="sm:text-3xl text-lg font-semibold mb-[44px] text-center">

@@ -102,13 +102,16 @@ export default function Create() {
 
   return (
     <>
-      <div
-        className="flex gap-1 mt-6 cursor-pointer"
-        onClick={() => router.push("/Dashboard")}
-      >
-        <Arrow />
-        <p>Dashboard</p>
-      </div>
+   <div className="flex gap-1 mt-6 items-center">
+  <div
+    className="flex items-center gap-1 cursor-pointer"
+    onClick={() => router.push("/Dashboard")}
+  >
+    <Arrow />
+    <p>Dashboard</p>
+  </div>
+</div>
+
 
       <Formik
         initialValues={initialFormValues}

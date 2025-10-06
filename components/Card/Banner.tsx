@@ -82,7 +82,7 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
             key={record.expectedProfit}
            className={`bg-white rounded-lg shadow-md p-15 pl-3 pt-6 my-4 border-l-4 ${borderColor}`}
           >
-            <div className="flex justify-between items-start mb-7">
+            <div className="flex justify-between items-start mb-7 flex-wrap">
               <h2 className="text-[18px] font-medium">
                 Investment Details
               </h2>

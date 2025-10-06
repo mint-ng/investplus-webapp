@@ -41,7 +41,7 @@ export default function DashboardLayout({ children }: Props) {
       <main
         role="main"
         id="dashboard"
-        className="lg:pl-[330px] [@media(min-width:1440px)]:pl-[400px] [@media(min-width:1680px)]:pl-[480px] pt-3 pb-10 bg-[#F6F6F6] min-h-[calc(100vh-100px)]"
+        className="lg:pl-[330px] lg:pr-[10px] [@media(min-width:1440px)]:pl-[400px] [@media(min-width:1440px)]:pr-[20px] [@media(min-width:1680px)]:pl-[480px] pt-3 pb-10 bg-[#F6F6F6] min-h-[calc(100vh-100px)]"
       >
         {children}
       </main>

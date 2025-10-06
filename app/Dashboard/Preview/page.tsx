@@ -79,13 +79,16 @@ useEffect(() => {
 
   return (
       <>
-      <div
-        className='flex gap-1 mt-6 cursor-pointer'
-         onClick={() => router.push("/Dashboard")}
-      >
-          <Arrow />
-          <p>Back to investment</p>
-          </div>
+    <div className="flex gap-1 mt-6 items-center">
+  <div
+    className="flex items-center gap-1 cursor-pointer"
+    onClick={() => router.push("/Dashboard")}
+  >
+    <Arrow />
+    <p>Back to investment</p>
+  </div>
+</div>
+
       <div className="w-full h-full flex flex-col justify-center items-center mt-[34px] px-3 sm:px-0">
                 <h2 className='text-[20px] font-medium text-[#000000]'>Preview Investment</h2>
                 <p className='text-[14px] max-w-[350px] text-center'>Always take a moment to review. Double-check your data before moving forward.</p>
