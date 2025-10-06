@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Modal from '@/components/Modal/Modal'
+import PendingConfirmationModal from './PendingConfirmationModal';
 
 type PendingTransferModalProps = {
   show: boolean
@@ -7,11 +8,30 @@ type PendingTransferModalProps = {
 }
 
 const PendingTransferModal = ({ show, onClose }: PendingTransferModalProps) => {
+  const [showConfirmation, setShowConfirmation] = useState(false)
+
+  const handleClose = () => {
+    // Instead of redirecting, show the confirmation modal
+    setShowConfirmation(true)
+  }
+
+   if (showConfirmation) {
+    return (
+      <PendingConfirmationModal
+        show={true}
+        onClose={() => {
+          setShowConfirmation(false)
+          onClose()
+        }}
+      />
+    )
+  }
+
   return (
     <Modal
       show={show}
-      onClose={onClose}
-      closeIcon={false}
+      onClose={handleClose}
+      closeIcon={true}
       shouldCloseOnOverlayClick={false}
       size="sm"
     >

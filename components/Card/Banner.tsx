@@ -119,7 +119,7 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
               </div>
 
             </div>
-{record.investmentStatus === "INACTIVE" && (
+{/* {record.investmentStatus === "INACTIVE" && (
   <div className="bg-red-50 border border-red-200 text-red-600 text-[11px] rounded-[10px] mb-6 flex items-center gap-2 max-w-[380px] p-1">
     <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
       <RedIcon className="w-4 h-4" />
@@ -129,7 +129,7 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
       will be updated, hence active.
     </span>
   </div>
-)}
+)} */}
 
 
 
