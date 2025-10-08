@@ -12,6 +12,8 @@ import { UpdateAccount } from "../apis/mutations/use-validate-otp";
 
 type MoreStepsProps = {
   sessionId: string;
+  firstName: string;
+  lastName: string;
 };
 
 const formValidationSchema = yup.object().shape({
@@ -31,12 +33,12 @@ const formValidationSchema = yup.object().shape({
       .required("Last name is required"),
 });
 
-export default function MoreSteps({ sessionId }: MoreStepsProps) {
+export default function MoreSteps({ sessionId, firstName, lastName  }: MoreStepsProps) {
   const [showBvnModal, setShowBvnModal] = useState(false);
   const AccountUpdate = UpdateAccount()
     const initialFormValues = {
-		firstName: "",
-		lastName: "",
+		firstName: firstName || "",
+    lastName: lastName || "",
 		email: "",
   };
   
@@ -81,6 +83,7 @@ export default function MoreSteps({ sessionId }: MoreStepsProps) {
                           value={values.firstName}
                           name="firstName"
                           className="mb-6"
+                          readOnly
                       />
                       <CustomInput
                           label="Last Name"
@@ -90,6 +93,7 @@ export default function MoreSteps({ sessionId }: MoreStepsProps) {
                           value={values.lastName}
                           name="lastName"
                           className="mb-6"
+                          readOnly
               />
               
                     <CustomInput

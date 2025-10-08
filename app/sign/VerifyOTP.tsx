@@ -6,7 +6,7 @@ import SuccessModal from "@/components/Modal/SuccessModal/SuccessModal";
 import ValidateOtp, { ResendOtp } from "../apis/mutations/use-validate-otp";
 
 type Props = {
-  onSuccess: () => void;
+  onSuccess: (data: { firstName: string; lastName: string }) => void;
   sessionId: string
 };
 
@@ -14,13 +14,22 @@ export default function VerifyOTP({onSuccess, sessionId}:Props) {
   const [otp, setOtp] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [userData, setUserData] = useState<{ firstName: string; lastName: string } | null>(null);
 
-   const OtpMutation = ValidateOtp({
+   
+  const OtpMutation = ValidateOtp({
     onSuccess: (data) => {
-      setShowSuccess(true); 
+      setShowSuccess(true);
       setSuccessMessage(data?.message ?? "Your OTP has been successfully verified.");
+
+      // ✅ Save the user details here
+      const details = {
+        firstName: data?.data?.firstName ?? "",
+        lastName: data?.data?.lastName ?? "",
+      };
+      setUserData(details);
     },
-   });
+  });
   
   const Resend = ResendOtp()
 
@@ -78,9 +87,14 @@ export default function VerifyOTP({onSuccess, sessionId}:Props) {
           Resend
         </Button>
       </div>
-      <SuccessModal show={showSuccess}
+       <SuccessModal
+        show={showSuccess}
         onClose={() => setShowSuccess(false)}
-        onSuccess={onSuccess}
+        onSuccess={() => {
+          if (userData) {
+            onSuccess(userData); // pass details back to Page
+          }
+        }}
         message={successMessage}
       />
     </div>
