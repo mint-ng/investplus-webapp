@@ -35,8 +35,8 @@ export function IdleProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <IdleTimerProvider
-      // timeout={1000 * 60 * 1}
-      timeout={1000 * 20}
+      timeout={1000 * 60 * 1}
+      // timeout={1000 * 20}
       onIdle={handleOnIdle}
       debounce={500}
       disabled={!idleActive}
