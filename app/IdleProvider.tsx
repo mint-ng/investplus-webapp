@@ -11,8 +11,11 @@ export function IdleProvider({ children }: { children: React.ReactNode }) {
   const { idleActive } = useAppSelector((state) => state.user);
   const [showModal, setShowModal] = useState(false);
 
+  const token = Cookies.get(INVESTMENT_USER_TOKEN);
+  const isLoggedIn = Boolean(token);
+
   const handleOnIdle = () => {
-    if (!idleActive) return;
+    if (!isLoggedIn || !idleActive) return;
     setShowModal(true);
     Cookies.set("sessionExpired", "true", { path: "/" });
   };
