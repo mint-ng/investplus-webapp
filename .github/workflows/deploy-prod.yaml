@@ -3,12 +3,12 @@
 name: Deploy to Prod Env
 on:
   push:
-    branches: [ "production-main" ]
+    branches: [ "production" ]
 
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_KEY: ${{ secrets.DOCKERHUB_TOKEN }}
-  IMAGE_NAME: ncto-beneficiary-portal
+  IMAGE_NAME: investpulse-app
   MANIFEST_DIR: apps/mintyn-prod
   RUN_NUMBER: ${{ github.run_number }}
 
@@ -37,9 +37,9 @@ jobs:
           tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:prod-app-${{ github.run_number }}
           file: Dockerfile-main
           build-args: |
-            APP_STAGE=prod
-            API_BASE_URL=https://api.mintfintech.com/card-service
-            CLIENT_KEY=${{ secrets.API_LIVE_KEY }}
+            APP_STAGE=production
+            API_BASE_URL=${{ secrets.LIVE_API_URL }}
+            CLIENT_KEY=${{ secrets.LIVE_CLIENT_KEY }}
 
   deploy:
     needs: build
@@ -55,10 +55,10 @@ jobs:
       - name: update image
         run: |
           cd ${{ env.MANIFEST_DIR }}
-          sed -i "s|${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}.*|${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:prod-app-${{ github.run_number }}|g" ncto-beneficiary-portal-values.yaml  
+          sed -i "s|${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}.*|${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:prod-app-${{ github.run_number }}|g" investpulse-app-values.yaml  
           git config user.email tech@mintfintech.com
           git config user.name mint-ng
-          git add ncto-beneficiary-portal-values.yaml
+          git add investpulse-app-values.yaml 
           git diff --staged  # Debugging: printing the changes to be committed
           git commit -m "Done by Github Actions Job change manifest: ${{ github.run_number }}"
           git push origin main 
