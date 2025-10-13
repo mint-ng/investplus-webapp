@@ -1,7 +1,7 @@
 "use client"
 import * as yup from "yup"
 import { Formik } from "formik";
-import React from 'react'
+import React, {useState} from 'react'
 import Modal from '@/components/Modal/Modal'
 import Button from '@/components/Button/Button'
 import CustomInput from '@/components/CustomInput/CustomInput'
@@ -16,14 +16,32 @@ type BvnProp = {
     
 }
 export default function BvnModal({ show, phoneNumber, onClose, onSuccess }: BvnProp) {
-  return (
+	const [conflictMessage, setConflictMessage] = useState("");
+	const [showConflict, setShowConflict] = useState(false);
+
+	const closeConflict = () => {
+    setShowConflict(false)
+    setConflictMessage("")
+	}
+	
+	return (
+	  <>
     <Modal
-			show={show}
+			show={show && !showConflict}
 			onClose={onClose}
 			size="sm"
 			heading="BVN"
 			footerElement={
-				<BvnForm phoneNumber={phoneNumber} onSuccess={onSuccess} />
+				<BvnForm phoneNumber={phoneNumber}
+				onSuccess={onSuccess}
+				onConflict={(message) => {
+              // ✅ Clean up the message before displaying
+              const cleanMessage = message.split("Link:")[0].trim()
+              onClose()
+              setConflictMessage(cleanMessage)
+              setShowConflict(true)
+            }}
+				 />
 			}
 		>
 			<div className="w-full">
@@ -31,11 +49,34 @@ export default function BvnModal({ show, phoneNumber, onClose, onSuccess }: BvnP
 					Please ensure your BVN is linked to the provided phone number to securely connect your investment to your Mintyn account.
 				</p>
 			</div>
-		</Modal>
+			</Modal>
+			{/* CONFLICT MODAL */}
+      <Modal
+        show={showConflict}
+        onClose={closeConflict}
+        size="sm"
+        heading="Account Already Exists"
+        footerElement={
+          <Button
+            className="w-full"
+            onClick={() => {
+              window.open("https://app.mintyn.com/sign-in", "_blank")
+              closeConflict()
+            }}
+          >
+            Go to Mintyn App
+          </Button>
+        }
+      >
+        <div className="text-center text-[#00000080] font-medium px-2">
+          {conflictMessage}
+        </div>
+      </Modal>
+			</>
   )
 }
 
-function BvnForm({phoneNumber, onSuccess}:{phoneNumber?:string, onSuccess?: (sessionId: string) => void;}) {
+function BvnForm({phoneNumber, onSuccess, onConflict}:{phoneNumber?:string, onSuccess?: (sessionId: string) => void;onConflict?: (message: string) => void}) {
 	const formValidationSchema = yup.object().shape({
 		bvn: yup
 			.string()
@@ -47,7 +88,7 @@ function BvnForm({phoneNumber, onSuccess}:{phoneNumber?:string, onSuccess?: (ses
 	const initialFormValues = {
 		bvn: "",
 	};
-	const OtpMutation = GetOtp({ onSuccess })
+	const OtpMutation = GetOtp({ onSuccess, onConflict })
 
 	return (
 			<Formik
